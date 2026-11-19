@@ -79,6 +79,7 @@ import org.schabi.newpipe.util.ThemeHelper;
 import org.schabi.newpipe.util.external_communication.ShareUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -472,7 +473,7 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         } finally {
             try {
                 retriever.release();
-            } catch (final RuntimeException e) {
+            } catch (final IOException | RuntimeException e) {
                 Log.w(TAG, "Unable to release video thumbnail retriever", e);
             }
         }
