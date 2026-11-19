@@ -93,6 +93,11 @@
             android:label="@string/settings" />
 
         <activity
+            android:name=".download.DownloadPlayerActivity"
+            android:exported="false"
+            android:label="@string/downloads_title" />
+
+        <activity
             android:name=".about.AboutActivity"
             android:exported="false"
             android:label="@string/title_activity_about" />

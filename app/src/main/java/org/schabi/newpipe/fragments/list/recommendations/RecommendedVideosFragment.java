@@ -8,6 +8,9 @@ package org.schabi.newpipe.fragments.list.recommendations;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +48,13 @@ public class RecommendedVideosFragment extends BaseListInfoFragment<InfoItem, Se
 
     public RecommendedVideosFragment() {
         super(UserAction.SEARCHED);
+    }
+
+    @Override
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             @Nullable final ViewGroup container,
+                             @Nullable final Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_kiosk, container, false);
     }
 
     @Override

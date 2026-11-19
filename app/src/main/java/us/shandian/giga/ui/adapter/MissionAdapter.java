@@ -59,6 +59,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.schabi.newpipe.BuildConfig;
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.download.DownloadPlayerActivity;
 import org.schabi.newpipe.error.ErrorInfo;
 import org.schabi.newpipe.error.ErrorUtil;
 import org.schabi.newpipe.error.UserAction;
@@ -347,6 +348,15 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         if (checkInvalidFile(mission)) return;
 
         String mimeType = resolveMimeType(mission);
+
+        if (mimeType.startsWith("audio/") || mimeType.startsWith("video/")) {
+            Intent playbackIntent = new Intent(mContext, DownloadPlayerActivity.class);
+            playbackIntent.setDataAndType(mission.storage.getUri(), mimeType);
+            playbackIntent.putExtra(Intent.EXTRA_TITLE, mission.storage.getName());
+            playbackIntent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
+            mContext.startActivity(playbackIntent);
+            return;
+        }
 
         if (BuildConfig.DEBUG)
             Log.v(TAG, "Mime: " + mimeType + " package: " + BuildConfig.APPLICATION_ID + ".provider");
