@@ -78,7 +78,7 @@ object ServiceHelper {
 
     @JvmStatic
     fun getSelectedServiceId(context: Context): Int {
-        return (getSelectedService(context) ?: DEFAULT_FALLBACK_SERVICE).serviceId
+        return (getSelectedService(context) ?: YOUTUBE_SERVICE).serviceId
     }
 
     @JvmStatic
