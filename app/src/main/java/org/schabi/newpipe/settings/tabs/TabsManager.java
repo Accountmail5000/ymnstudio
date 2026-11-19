@@ -11,6 +11,8 @@ import org.schabi.newpipe.R;
 import java.util.List;
 
 public final class TabsManager {
+    private static final String YMN_TUBE_TABS_MIGRATION_KEY = "ymntube_default_tabs_v2";
+
     private final SharedPreferences sharedPreferences;
     private final String savedTabsKey;
     private final Context context;
@@ -21,6 +23,13 @@ public final class TabsManager {
         this.context = context;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.savedTabsKey = context.getString(R.string.saved_tabs_key);
+        if (!sharedPreferences.getBoolean(YMN_TUBE_TABS_MIGRATION_KEY, false)) {
+            sharedPreferences.edit()
+                    .putString(savedTabsKey,
+                            TabsJsonHelper.getJsonToSave(TabsJsonHelper.getDefaultTabs()))
+                    .putBoolean(YMN_TUBE_TABS_MIGRATION_KEY, true)
+                    .apply();
+        }
     }
 
     public static TabsManager getManager(final Context context) {

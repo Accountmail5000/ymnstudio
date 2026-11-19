@@ -22,15 +22,22 @@ import static us.shandian.giga.get.DownloadMission.ERROR_UNKNOWN_EXCEPTION;
 import static us.shandian.giga.get.DownloadMission.ERROR_UNKNOWN_HOST;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +51,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
@@ -67,6 +75,7 @@ import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.streams.io.StoredFileHelper;
 import org.schabi.newpipe.util.Localization;
 import org.schabi.newpipe.util.NavigationHelper;
+import org.schabi.newpipe.util.ThemeHelper;
 import org.schabi.newpipe.util.external_communication.ShareUtils;
 
 import java.io.File;
@@ -77,6 +86,8 @@ import java.util.Iterator;
 import java.util.Date;
 import java.util.Locale;
 import java.text.DateFormat;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
@@ -102,6 +113,16 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
     private static final String DELETE = "deleteFinishedDownloads";
 
     private static final int HASH_NOTIFICATION_ID = 123790;
+    private static final Handler MAIN_THREAD_HANDLER = new Handler(Looper.getMainLooper());
+    private static final ExecutorService VIDEO_THUMBNAIL_EXECUTOR =
+            Executors.newFixedThreadPool(2);
+    private static final LruCache<String, Bitmap> VIDEO_THUMBNAIL_CACHE =
+            new LruCache<>(2 * 1024) {
+                @Override
+                protected int sizeOf(final String key, final Bitmap value) {
+                    return Math.max(1, value.getByteCount() / 1024);
+                }
+            };
 
     private final Context mContext;
     private final LayoutInflater mInflater;
@@ -163,6 +184,7 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
 
         if (view instanceof ViewHolderHeader) return;
         ViewHolderItem h = (ViewHolderItem) view;
+        h.icon.setTag(R.id.item_icon, null);
 
         if (h.item.mission instanceof DownloadMission) {
             mPendingDownloadsItems.remove(h);
@@ -201,6 +223,14 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         Utility.FileType type = Utility.getFileType(item.mission.kind, item.mission.storage.getName());
 
         h.icon.setImageResource(Utility.getIconForFileType(type));
+        h.icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        h.icon.setImageTintList(ColorStateList.valueOf(
+                ThemeHelper.resolveColorFromAttr(mContext, R.attr.actionColor)));
+        h.icon.setTag(R.id.item_icon, null);
+        if (item.mission instanceof FinishedMission && item.mission.kind == 'v'
+                && !item.mission.storage.isInvalid()) {
+            loadVideoThumbnail(h, item.mission.storage.getUri());
+        }
         h.name.setText(item.mission.storage.getName());
 
         h.progress.setColors(Utility.getBackgroundForFileType(mContext, type), Utility.getForegroundForFileType(mContext, type));
@@ -354,7 +384,15 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
             playbackIntent.setDataAndType(mission.storage.getUri(), mimeType);
             playbackIntent.putExtra(Intent.EXTRA_TITLE, mission.storage.getName());
             playbackIntent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
-            mContext.startActivity(playbackIntent);
+            if (!(mContext instanceof Activity)) {
+                playbackIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+            }
+            try {
+                mContext.startActivity(playbackIntent);
+            } catch (final ActivityNotFoundException | SecurityException e) {
+                Log.e(TAG, "Unable to open downloaded media", e);
+                Toast.makeText(mContext, R.string.general_error, Toast.LENGTH_LONG).show();
+            }
             return;
         }
 
@@ -372,6 +410,72 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         chooserIntent.addFlags(FLAG_GRANT_PREFIX_URI_PERMISSION);
 
         ShareUtils.openIntentInApp(mContext, chooserIntent);
+    }
+
+    private void loadVideoThumbnail(@NonNull final ViewHolderItem holder,
+                                    @NonNull final Uri uri) {
+        final String cacheKey = uri.toString();
+        holder.icon.setTag(R.id.item_icon, cacheKey);
+        holder.icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        holder.icon.setImageTintList(null);
+
+        final Bitmap cachedThumbnail = VIDEO_THUMBNAIL_CACHE.get(cacheKey);
+        if (cachedThumbnail != null) {
+            holder.icon.setImageBitmap(cachedThumbnail);
+            return;
+        }
+
+        VIDEO_THUMBNAIL_EXECUTOR.execute(() -> {
+            final Bitmap thumbnail = createVideoThumbnail(uri);
+            if (thumbnail == null) {
+                return;
+            }
+            VIDEO_THUMBNAIL_CACHE.put(cacheKey, thumbnail);
+            MAIN_THREAD_HANDLER.post(() -> {
+                if (cacheKey.equals(holder.icon.getTag(R.id.item_icon))) {
+                    holder.icon.setImageBitmap(thumbnail);
+                }
+            });
+        });
+    }
+
+    @Nullable
+    private Bitmap createVideoThumbnail(@NonNull final Uri uri) {
+        final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(mContext, uri);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                final Bitmap scaledFrame = retriever.getScaledFrameAtTime(1_000_000L,
+                        MediaMetadataRetriever.OPTION_CLOSEST_SYNC, 320, 180);
+                if (scaledFrame != null) {
+                    return scaledFrame;
+                }
+            }
+
+            final Bitmap frame = retriever.getFrameAtTime(1_000_000L,
+                    MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            if (frame == null || (frame.getWidth() <= 320 && frame.getHeight() <= 180)) {
+                return frame;
+            }
+
+            final float scale = Math.min(320f / frame.getWidth(), 180f / frame.getHeight());
+            final Bitmap scaledFrame = Bitmap.createScaledBitmap(frame,
+                    Math.max(1, Math.round(frame.getWidth() * scale)),
+                    Math.max(1, Math.round(frame.getHeight() * scale)), true);
+            if (scaledFrame != frame) {
+                frame.recycle();
+            }
+            return scaledFrame;
+        } catch (final RuntimeException e) {
+            Log.w(TAG, "Unable to load thumbnail for downloaded video " + uri, e);
+            return null;
+        } finally {
+            try {
+                retriever.release();
+            } catch (final RuntimeException e) {
+                Log.w(TAG, "Unable to release video thumbnail retriever", e);
+            }
+        }
     }
 
     private void shareFile(Mission mission) {

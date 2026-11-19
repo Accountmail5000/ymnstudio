@@ -31,7 +31,7 @@
         app:useSimpleSummaryProvider="true" />
 
     <ListPreference
-        android:defaultValue="@string/default_localization_key"
+        android:defaultValue="@string/default_content_country_key"
         android:entries="@array/country_names"
         android:entryValues="@array/country_codes"
         android:key="@string/content_country_key"

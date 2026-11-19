@@ -322,6 +322,17 @@ public class MainActivity extends AppCompatActivity {
         } else if (fragment instanceof StatisticsPlaylistFragment) {
             setMainNavigationSelection(R.id.main_navigation_history);
         }
+        updateToolbarBrandLogoVisibility();
+    }
+
+    private void updateToolbarBrandLogoVisibility() {
+        if (toolbarLayoutBinding == null) {
+            return;
+        }
+        final Fragment fragment = getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_holder);
+        toolbarLayoutBinding.toolbarBrandLogo.setVisibility(
+                fragment instanceof SearchFragment ? View.GONE : View.VISIBLE);
     }
 
     private void setMainNavigationSelection(final int itemId) {
@@ -760,6 +771,7 @@ public class MainActivity extends AppCompatActivity {
         if (!(fragment instanceof SearchFragment)) {
             toolbarLayoutBinding.toolbarSearchContainer.getRoot().setVisibility(View.GONE);
         }
+        updateToolbarBrandLogoVisibility();
 
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

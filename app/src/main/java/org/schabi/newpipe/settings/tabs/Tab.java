@@ -264,7 +264,7 @@ public abstract class Tab {
 
         @Override
         public String getTabName(final Context context) {
-            return context.getString(R.string.tab_bookmarks);
+            return context.getString(R.string.tab_saved);
         }
 
         @DrawableRes
@@ -487,7 +487,7 @@ public abstract class Tab {
 
         @Override
         public String getTabName(final Context context) {
-            return context.getString(R.string.tab_for_you);
+            return context.getString(R.string.tab_feed);
         }
 
         @DrawableRes

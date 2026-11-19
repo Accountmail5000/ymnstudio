@@ -106,7 +106,7 @@ public final class Localization {
     public static ContentCountry getPreferredContentCountry(@NonNull final Context context) {
         final String contentCountry = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(context.getString(R.string.content_country_key),
-                        context.getString(R.string.default_localization_key));
+                        context.getString(R.string.default_content_country_key));
         if (contentCountry.equals(context.getString(R.string.default_localization_key))) {
             return new ContentCountry(Locale.getDefault().getCountry());
         }

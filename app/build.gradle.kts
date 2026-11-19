@@ -64,10 +64,10 @@ configure<ApplicationExtension> {
             // suffix the app id and the app name with git branch name
             if (normalizedWorkingBranch.isEmpty() || workingBranch in defaultBranches) {
                 applicationIdSuffix = ".debug"
-                resValue("string", "app_name", "YmnTube Debug")
+                resValue("string", "app_name", "YmnTube")
             } else {
                 applicationIdSuffix = ".debug.$normalizedWorkingBranch"
-                resValue("string", "app_name", "YmnTube $workingBranch")
+                resValue("string", "app_name", "YmnTube")
             }
         }
 
