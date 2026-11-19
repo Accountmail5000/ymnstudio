@@ -88,15 +88,15 @@ public class DownloadActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.action_search:
-                NavigationHelper.openSearch(this, ServiceHelper.getSelectedServiceId(this), "");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        final int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
+        if (itemId == R.id.action_search) {
+            NavigationHelper.openSearch(this, ServiceHelper.getSelectedServiceId(this), "");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
