@@ -2515,11 +2515,15 @@ public final class VideoDetailFragment
 
         final int peekHeight = getResources().getDimensionPixelSize(R.dimen.mini_player_height);
         if (bottomSheetState != BottomSheetBehavior.STATE_HIDDEN) {
-            manageSpaceAtTheBottom(false);
-            bottomSheetBehavior.setPeekHeight(peekHeight);
             if (bottomSheetState == BottomSheetBehavior.STATE_COLLAPSED) {
+                manageSpaceAtTheBottom(true);
+                bottomSheetBehavior.setPeekHeight(0);
+                bottomSheetLayout.setVisibility(View.GONE);
                 binding.overlayLayout.setAlpha(MAX_OVERLAY_ALPHA);
             } else if (bottomSheetState == BottomSheetBehavior.STATE_EXPANDED) {
+                manageSpaceAtTheBottom(false);
+                bottomSheetBehavior.setPeekHeight(peekHeight);
+                bottomSheetLayout.setVisibility(View.VISIBLE);
                 binding.overlayLayout.setAlpha(0);
                 setOverlayElementsClickable(false);
             }
@@ -2536,12 +2540,8 @@ public final class VideoDetailFragment
                         manageSpaceAtTheBottom(true);
 
                         bottomSheetBehavior.setPeekHeight(0);
-                        cleanUp();
                         bottomSheetLayout.setVisibility(View.GONE);
-                        requireActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .remove(VideoDetailFragment.this)
-                                .commitAllowingStateLoss();
+                        cleanUp();
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED:
                         moveFocusToMainFragment(false);
@@ -2565,9 +2565,10 @@ public final class VideoDetailFragment
                         break;
                     case BottomSheetBehavior.STATE_COLLAPSED:
                         moveFocusToMainFragment(true);
-                        manageSpaceAtTheBottom(false);
+                        manageSpaceAtTheBottom(true);
 
-                        bottomSheetBehavior.setPeekHeight(peekHeight);
+                        bottomSheetBehavior.setPeekHeight(0);
+                        bottomSheetLayout.setVisibility(View.GONE);
 
                         // Re-enable clicks
                         setOverlayElementsClickable(true);

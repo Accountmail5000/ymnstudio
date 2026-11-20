@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.schabi.newpipe.views.FocusAwareDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.schabi.newpipe.views.FocusAwareCoordinator xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <org.schabi.newpipe.views.FocusAwareCoordinator
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_holder"
@@ -38,10 +34,4 @@
             app:labelVisibilityMode="labeled"
             app:menu="@menu/main_navigation" />
 
-    </org.schabi.newpipe.views.FocusAwareCoordinator>
-
-    <include
-        layout="@layout/drawer_layout"
-        android:id="@+id/drawer_layout" />
-
-</org.schabi.newpipe.views.FocusAwareDrawerLayout>
+</org.schabi.newpipe.views.FocusAwareCoordinator>
