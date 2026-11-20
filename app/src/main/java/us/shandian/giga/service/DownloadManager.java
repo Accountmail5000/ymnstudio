@@ -407,6 +407,27 @@ public class DownloadManager {
         return count;
     }
 
+    public int getActiveDownloadProgressPercent() {
+        synchronized (this) {
+            final ArrayList<Long> completedBytes = new ArrayList<>();
+            final ArrayList<Long> totalBytes = new ArrayList<>();
+            for (DownloadMission mission : mMissionsPending) {
+                if (mission.running && !mission.isPsFailed() && !mission.isFinished()) {
+                    completedBytes.add(mission.done);
+                    totalBytes.add(mission.length);
+                }
+            }
+
+            final long[] done = new long[completedBytes.size()];
+            final long[] lengths = new long[totalBytes.size()];
+            for (int i = 0; i < completedBytes.size(); i++) {
+                done[i] = completedBytes.get(i);
+                lengths[i] = totalBytes.get(i);
+            }
+            return DownloadProgressCalculator.calculatePercent(done, lengths);
+        }
+    }
+
     public void pauseAllMissions(boolean force) {
         synchronized (this) {
             for (DownloadMission mission : mMissionsPending) {

@@ -3,6 +3,40 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp">
+
+        <EditText
+            android:id="@+id/download_link_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/download_link_hint"
+            android:inputType="textUri"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/paste_download_link"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:text="@string/download_paste_link" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start_download_from_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:text="@string/download_from_link" />
+    </LinearLayout>
+
     <include
         android:id="@+id/list_empty_view"
         layout="@layout/list_empty_view"
@@ -11,6 +45,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mission_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

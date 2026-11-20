@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import androidx.annotation.IdRes;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,6 +25,7 @@ public final class MainNavigationHelper {
     public static void setup(final BottomNavigationView navigationView,
                              final Activity activity,
                              @IdRes final int selectedItemId) {
+        attachDownloadProgress(activity, navigationView);
         navigationView.getMenu().findItem(R.id.main_navigation_history)
                 .setVisible(PreferenceManager.getDefaultSharedPreferences(activity)
                         .getBoolean(activity.getString(R.string.enable_watch_history_key), true));
@@ -49,6 +51,14 @@ public final class MainNavigationHelper {
             }
             return false;
         });
+    }
+
+    public static void attachDownloadProgress(final Activity activity,
+                                              final BottomNavigationView navigationView) {
+        if (activity instanceof LifecycleOwner) {
+            ((LifecycleOwner) activity).getLifecycle().addObserver(
+                    new DownloadProgressIndicator(activity, navigationView));
+        }
     }
 
     private static void openMainDestination(final Activity activity, @IdRes final int destination) {

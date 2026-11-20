@@ -74,6 +74,7 @@ import org.schabi.newpipe.settings.migration.MigrationManager;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.DeviceUtils;
 import org.schabi.newpipe.util.Localization;
+import org.schabi.newpipe.util.MainNavigationHelper;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.PermissionHelper;
 import org.schabi.newpipe.util.ReleaseVersionUtil;
@@ -241,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setupMainNavigation() {
         final var navigation = mainBinding.mainBottomNavigation;
+        MainNavigationHelper.attachDownloadProgress(this, navigation);
         navigation.setSelectedItemId(R.id.main_navigation_home);
         navigation.getMenu().findItem(R.id.main_navigation_history)
                 .setVisible(sharedPreferences.getBoolean(

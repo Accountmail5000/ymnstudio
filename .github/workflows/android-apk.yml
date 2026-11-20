@@ -40,6 +40,8 @@ jobs:
           --tests org.schabi.newpipe.player.ui.MiniPlayerDismissalTest
           --tests org.schabi.newpipe.fragments.detail.FullscreenLayoutPolicyTest
           --tests org.schabi.newpipe.fragments.list.recommendations.RecommendationGridPolicyTest
+          --tests org.schabi.newpipe.download.DownloadLinkInputTest
+          --tests us.shandian.giga.service.DownloadProgressCalculatorTest
           -x :app:runKtlint
 
       - name: Build debug APK

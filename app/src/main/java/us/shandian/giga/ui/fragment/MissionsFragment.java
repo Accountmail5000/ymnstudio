@@ -1,6 +1,8 @@
 package us.shandian.giga.ui.fragment;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -28,17 +31,32 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.nononsenseapps.filepicker.Utils;
 
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.download.DownloadDialog;
+import org.schabi.newpipe.download.DownloadLinkInput;
+import org.schabi.newpipe.error.ErrorInfo;
+import org.schabi.newpipe.error.ErrorUtil;
+import org.schabi.newpipe.error.UserAction;
+import org.schabi.newpipe.extractor.NewPipe;
+import org.schabi.newpipe.extractor.StreamingService;
+import org.schabi.newpipe.extractor.stream.StreamInfo;
 import org.schabi.newpipe.settings.NewPipeSettings;
 import org.schabi.newpipe.streams.io.NoFileManagerSafeGuard;
 import org.schabi.newpipe.streams.io.StoredFileHelper;
+import org.schabi.newpipe.util.ExtractorHelper;
 import org.schabi.newpipe.util.FilePickerActivityHelper;
+import org.schabi.newpipe.util.ServiceHelper;
 
 import java.io.File;
 import java.io.IOException;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import us.shandian.giga.get.DownloadMission;
 import us.shandian.giga.service.DownloadManager;
 import us.shandian.giga.service.DownloadManagerService;
@@ -66,6 +84,9 @@ public class MissionsFragment extends Fragment {
 
     private DownloadManagerBinder mBinder;
     private boolean mForceUpdate;
+    private EditText downloadLinkInput;
+    private View startDownloadFromLink;
+    private final CompositeDisposable downloadDisposables = new CompositeDisposable();
 
     private DownloadMission unsafeMissionTarget = null;
     private final ActivityResultLauncher<Intent> requestDownloadSaveAsLauncher =
@@ -110,6 +131,10 @@ public class MissionsFragment extends Fragment {
         // Views
         mEmpty = v.findViewById(R.id.list_empty_view);
         mList = v.findViewById(R.id.mission_recycler);
+        downloadLinkInput = v.findViewById(R.id.download_link_input);
+        startDownloadFromLink = v.findViewById(R.id.start_download_from_link);
+        v.findViewById(R.id.paste_download_link).setOnClickListener(view -> pasteLinkFromClipboard());
+        startDownloadFromLink.setOnClickListener(view -> downloadFromLink());
 
         // Init layouts managers
         mGridManager = new GridLayoutManager(getActivity(), SPAN_SIZE);
@@ -161,6 +186,7 @@ public class MissionsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        downloadDisposables.clear();
         if (mBinder == null || mAdapter == null) return;
 
         mBinder.removeMissionEventListener(mAdapter);
@@ -170,6 +196,82 @@ public class MissionsFragment extends Fragment {
 
         mBinder = null;
         mAdapter = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        downloadDisposables.clear();
+        downloadLinkInput = null;
+        startDownloadFromLink = null;
+        super.onDestroyView();
+    }
+
+    private void pasteLinkFromClipboard() {
+        final ClipboardManager clipboard =
+                (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+        final ClipData clip = clipboard == null ? null : clipboard.getPrimaryClip();
+        if (clip == null || clip.getItemCount() == 0) {
+            Toast.makeText(mContext, R.string.download_link_clipboard_empty, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
+        final CharSequence text = clip.getItemAt(0).coerceToText(mContext);
+        if (text == null || text.toString().trim().isEmpty()) {
+            Toast.makeText(mContext, R.string.download_link_clipboard_empty, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        downloadLinkInput.setText(text);
+        downloadLinkInput.setSelection(downloadLinkInput.length());
+    }
+
+    private void downloadFromLink() {
+        final String input = downloadLinkInput.getText().toString();
+        if (DownloadLinkInput.normalize(input) == null) {
+            downloadLinkInput.setError(getString(R.string.download_link_invalid));
+            return;
+        }
+
+        downloadLinkInput.setError(null);
+        startDownloadFromLink.setEnabled(false);
+        downloadDisposables.add(DownloadLinkInput.fetch(input, url ->
+                Single.fromCallable(() -> NewPipe.getServiceByUrl(url))
+                        .onErrorResumeNext(error ->
+                                Single.<StreamingService>error(
+                                        new DownloadLinkInput.UnsupportedDownloadLinkException(
+                                                error)))
+                        .flatMap(service -> {
+                            if (!ServiceHelper.isSupportedServiceId(service.getServiceId())) {
+                                return Single.<StreamInfo>error(
+                                        new DownloadLinkInput.UnsupportedDownloadLinkException());
+                            }
+                            return ExtractorHelper.getStreamInfo(
+                                    service.getServiceId(), url, false);
+                        }))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(info -> {
+                    startDownloadFromLink.setEnabled(true);
+                    try {
+                        new DownloadDialog(requireContext(), info)
+                                .show(getParentFragmentManager(), "downloadDialog");
+                    } catch (final Exception e) {
+                        ErrorUtil.showSnackbar(requireActivity(), new ErrorInfo(
+                                e, UserAction.DOWNLOAD_OPEN_DIALOG,
+                                "Opening download dialog", info));
+                    }
+                }, error -> {
+                    startDownloadFromLink.setEnabled(true);
+                    if (error instanceof DownloadLinkInput.UnsupportedDownloadLinkException) {
+                        Snackbar.make(requireView(), R.string.download_link_unsupported,
+                                Snackbar.LENGTH_LONG).show();
+                    } else {
+                        ErrorUtil.showSnackbar(requireActivity(), new ErrorInfo(
+                                error, UserAction.DOWNLOAD_OPEN_DIALOG,
+                                "Resolving pasted download link"));
+                    }
+                }));
     }
 
     @Override
