@@ -120,8 +120,8 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.useMiniVariant = useMiniVariant;
     }
 
-    public void setFullWidthGridThumbnails(final boolean useFullWidthGridThumbnails) {
-        this.useFullWidthGridThumbnails = useFullWidthGridThumbnails;
+    public void setFullWidthGridThumbnails(final boolean fullWidthGridThumbnails) {
+        this.useFullWidthGridThumbnails = fullWidthGridThumbnails;
     }
 
     public void setItemViewMode(final ItemViewMode itemViewMode) {
