@@ -1571,12 +1571,12 @@ public final class VideoDetailFragment
 
         final View toolbar = activity.findViewById(R.id.toolbar_layout);
         final View navigation = activity.findViewById(R.id.main_bottom_navigation);
-        final View playerHolder = activity.findViewById(R.id.fragment_player_holder);
-        if (toolbar == null || navigation == null || playerHolder == null) {
+        final View playerHolderView = activity.findViewById(R.id.fragment_player_holder);
+        if (toolbar == null || navigation == null || playerHolderView == null) {
             return;
         }
 
-        final ViewGroup.LayoutParams layoutParams = playerHolder.getLayoutParams();
+        final ViewGroup.LayoutParams layoutParams = playerHolderView.getLayoutParams();
         if (!(layoutParams instanceof ViewGroup.MarginLayoutParams)) {
             return;
         }
@@ -1613,7 +1613,7 @@ public final class VideoDetailFragment
             }
             marginParams.bottomMargin = FullscreenLayoutPolicy.playerBottomMargin(
                     true, fullscreenPlayerBottomMargin);
-            playerHolder.setLayoutParams(marginParams);
+            playerHolderView.setLayoutParams(marginParams);
             final int fullscreenOrientation = FullscreenLayoutPolicy.requestedOrientation(
                     true, fullscreenRequestedOrientation);
             if (activity.getRequestedOrientation() != fullscreenOrientation) {
@@ -1635,7 +1635,7 @@ public final class VideoDetailFragment
             }
             marginParams.bottomMargin = FullscreenLayoutPolicy.playerBottomMargin(
                     false, fullscreenPlayerBottomMargin);
-            playerHolder.setLayoutParams(marginParams);
+            playerHolderView.setLayoutParams(marginParams);
             fullscreenChromeStateCaptured = false;
             final int restoredOrientation = FullscreenLayoutPolicy.requestedOrientation(
                     false, fullscreenRequestedOrientation);
