@@ -33,6 +33,10 @@ public final class MiniPlayerState {
         return visible;
     }
 
+    public boolean isVisibleWhenPlayerExpanded(final boolean playerExpanded) {
+        return visible && !playerExpanded;
+    }
+
     public boolean isPlaying() {
         return playing;
     }

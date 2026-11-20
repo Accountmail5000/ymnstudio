@@ -41,12 +41,8 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
             new BottomSheetBehavior.BottomSheetCallback() {
                 @Override
                 public void onStateChanged(@NonNull final View bottomSheet, final int newState) {
-                    if (newState == BottomSheetBehavior.STATE_COLLAPSED
-                            && state.isVisible() && bottomSheetBehavior != null) {
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                    } else {
-                        updateVisibility();
-                    }
+                    // Hiding the sheet triggers VideoDetailFragment cleanup and stops playback.
+                    updateVisibility();
                 }
 
                 @Override
@@ -313,7 +309,7 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
         final boolean playerExpanded = bottomSheetBehavior != null
                 && bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
         binding.getRoot().setVisibility(
-                state.isVisible() && !playerExpanded ? View.VISIBLE : View.GONE);
+                state.isVisibleWhenPlayerExpanded(playerExpanded) ? View.VISIBLE : View.GONE);
     }
 
     private void togglePlayback() {

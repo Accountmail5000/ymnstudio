@@ -22,6 +22,15 @@ public class MiniPlayerStateTest {
     }
 
     @Test
+    public void collapsedPlayerSheetKeepsMiniPlayerVisible() {
+        final MiniPlayerState playing = MiniPlayerState.from(
+                true, "Video title", PlaybackStateCompat.STATE_PLAYING);
+
+        assertTrue(playing.isVisibleWhenPlayerExpanded(false));
+        assertFalse(playing.isVisibleWhenPlayerExpanded(true));
+    }
+
+    @Test
     public void stoppedDisconnectedOrUntitledPlaybackIsHidden() {
         assertFalse(MiniPlayerState.from(
                 true, "Video title", PlaybackStateCompat.STATE_STOPPED).isVisible());

@@ -87,7 +87,7 @@ public class MainFragment extends BaseFragment {
     }
 
     static List<Tab> getHomeTabs() {
-        return List.of(Tab.Type.FEED.getTab());
+        return List.of(Tab.Type.DEFAULT_KIOSK.getTab());
     }
 
     private void updateTitleForTab(final int tabPosition) {

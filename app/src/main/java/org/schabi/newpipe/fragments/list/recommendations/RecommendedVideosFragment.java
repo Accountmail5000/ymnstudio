@@ -24,6 +24,7 @@ import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.ListExtractor;
 import org.schabi.newpipe.extractor.search.SearchInfo;
 import org.schabi.newpipe.fragments.list.BaseListInfoFragment;
+import org.schabi.newpipe.info_list.ItemViewMode;
 import org.schabi.newpipe.local.history.HistoryRecordManager;
 import org.schabi.newpipe.util.ExtractorHelper;
 import org.schabi.newpipe.util.RecommendationHelper;
@@ -98,6 +99,11 @@ public class RecommendedVideosFragment extends BaseListInfoFragment<InfoItem, Se
         super.handleResult(result);
         name = getString(R.string.tab_for_you);
         setTitle(name);
+    }
+
+    @Override
+    protected ItemViewMode getItemViewMode() {
+        return ItemViewMode.GRID;
     }
 
     private Single<String> getRecommendationQuery() {
