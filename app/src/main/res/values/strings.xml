@@ -851,6 +851,7 @@
     <string name="open_play_queue">Open play queue</string>
     <string name="toggle_fullscreen">Toggle fullscreen</string>
     <string name="toggle_screen_orientation">Toggle screen orientation</string>
+    <string name="mini_player_now_playing">Now playing</string>
     <string name="previous_stream">Previous stream</string>
     <string name="next_stream">Next stream</string>
     <string name="play">Play</string>

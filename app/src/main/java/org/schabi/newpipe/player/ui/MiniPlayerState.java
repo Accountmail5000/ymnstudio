@@ -15,9 +15,7 @@ public final class MiniPlayerState {
 
     @NonNull
     public static MiniPlayerState from(final boolean connected,
-                                       final CharSequence title,
                                        final int playbackState) {
-        final boolean hasTitle = title != null && title.toString().trim().length() > 0;
         final boolean active = playbackState != PlaybackStateCompat.STATE_NONE
                 && playbackState != PlaybackStateCompat.STATE_STOPPED
                 && playbackState != PlaybackStateCompat.STATE_ERROR;
@@ -26,7 +24,7 @@ public final class MiniPlayerState {
                 || playbackState == PlaybackStateCompat.STATE_CONNECTING
                 || playbackState == PlaybackStateCompat.STATE_FAST_FORWARDING
                 || playbackState == PlaybackStateCompat.STATE_REWINDING;
-        return new MiniPlayerState(connected && hasTitle && active, isPlaying);
+        return new MiniPlayerState(connected && active, isPlaying);
     }
 
     public boolean isVisible() {

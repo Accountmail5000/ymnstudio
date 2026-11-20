@@ -86,6 +86,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final HistoryRecordManager recordManager;
 
     private boolean useMiniVariant = false;
+    private boolean useFullWidthGridThumbnails = false;
     private boolean showFooter = false;
 
     private ItemViewMode itemMode = ItemViewMode.LIST;
@@ -117,6 +118,10 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setUseMiniVariant(final boolean useMiniVariant) {
         this.useMiniVariant = useMiniVariant;
+    }
+
+    public void setFullWidthGridThumbnails(final boolean useFullWidthGridThumbnails) {
+        this.useFullWidthGridThumbnails = useFullWidthGridThumbnails;
     }
 
     public void setItemViewMode(final ItemViewMode itemViewMode) {
@@ -299,7 +304,8 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case STREAM_HOLDER_TYPE:
                 return new StreamInfoItemHolder(infoItemBuilder, parent);
             case GRID_STREAM_HOLDER_TYPE:
-                return new StreamGridInfoItemHolder(infoItemBuilder, parent);
+                return new StreamGridInfoItemHolder(infoItemBuilder, parent,
+                        useFullWidthGridThumbnails);
             case CARD_STREAM_HOLDER_TYPE:
                 return new StreamCardInfoItemHolder(infoItemBuilder, parent);
             case MINI_CHANNEL_HOLDER_TYPE:

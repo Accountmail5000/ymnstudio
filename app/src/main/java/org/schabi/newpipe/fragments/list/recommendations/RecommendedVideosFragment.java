@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.evernote.android.state.State;
 
@@ -61,6 +63,7 @@ public class RecommendedVideosFragment extends BaseListInfoFragment<InfoItem, Se
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        infoListAdapter.setFullWidthGridThumbnails(true);
         serviceId = ServiceHelper.getSelectedServiceId(requireContext());
         setInitialData(serviceId, "", getString(R.string.tab_for_you));
     }
@@ -104,6 +107,15 @@ public class RecommendedVideosFragment extends BaseListInfoFragment<InfoItem, Se
     @Override
     protected ItemViewMode getItemViewMode() {
         return ItemViewMode.GRID;
+    }
+
+    @Override
+    protected RecyclerView.LayoutManager getGridLayoutManager() {
+        final int spanCount = RecommendationGridPolicy.getColumnCount(
+                getResources().getConfiguration().screenWidthDp);
+        final GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), spanCount);
+        layoutManager.setSpanSizeLookup(infoListAdapter.getSpanSizeLookup(spanCount));
+        return layoutManager;
     }
 
     private Single<String> getRecommendationQuery() {

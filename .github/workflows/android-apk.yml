@@ -34,10 +34,15 @@ jobs:
           --tests org.schabi.newpipe.fragments.detail.VideoDetailFragmentTest
           --tests org.schabi.newpipe.local.feed.FeedInitialLoadGateTest
           --tests org.schabi.newpipe.player.ui.MiniPlayerStateTest
+          --tests org.schabi.newpipe.player.ui.MiniPlayerMetadataTest
+          --tests org.schabi.newpipe.fragments.list.recommendations.RecommendationGridPolicyTest
           -x :app:runKtlint
 
       - name: Build debug APK
-        run: ./gradlew --no-daemon -DskipFormatKtlint=true assembleDebug -x :app:runKtlint
+        run: >-
+          ./gradlew --no-daemon -DskipFormatKtlint=true
+          assembleDebug assembleDebugAndroidTest
+          -x :app:runKtlint
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v7

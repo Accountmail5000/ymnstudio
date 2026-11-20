@@ -11,9 +11,9 @@ public class MiniPlayerStateTest {
     @Test
     public void activeTrackIsVisibleAndReflectsPlayPauseState() {
         final MiniPlayerState playing = MiniPlayerState.from(
-                true, "Video title", PlaybackStateCompat.STATE_PLAYING);
+                true, PlaybackStateCompat.STATE_PLAYING);
         final MiniPlayerState paused = MiniPlayerState.from(
-                true, "Video title", PlaybackStateCompat.STATE_PAUSED);
+                true, PlaybackStateCompat.STATE_PAUSED);
 
         assertTrue(playing.isVisible());
         assertTrue(playing.isPlaying());
@@ -24,19 +24,23 @@ public class MiniPlayerStateTest {
     @Test
     public void collapsedPlayerSheetKeepsMiniPlayerVisible() {
         final MiniPlayerState playing = MiniPlayerState.from(
-                true, "Video title", PlaybackStateCompat.STATE_PLAYING);
+                true, PlaybackStateCompat.STATE_PLAYING);
 
         assertTrue(playing.isVisibleWhenPlayerExpanded(false));
         assertFalse(playing.isVisibleWhenPlayerExpanded(true));
     }
 
     @Test
-    public void stoppedDisconnectedOrUntitledPlaybackIsHidden() {
+    public void stoppedOrDisconnectedPlaybackIsHidden() {
         assertFalse(MiniPlayerState.from(
-                true, "Video title", PlaybackStateCompat.STATE_STOPPED).isVisible());
+                true, PlaybackStateCompat.STATE_STOPPED).isVisible());
         assertFalse(MiniPlayerState.from(
-                false, "Video title", PlaybackStateCompat.STATE_PLAYING).isVisible());
-        assertFalse(MiniPlayerState.from(
-                true, null, PlaybackStateCompat.STATE_PLAYING).isVisible());
+                false, PlaybackStateCompat.STATE_PLAYING).isVisible());
+    }
+
+    @Test
+    public void activePlaybackWithoutMetadataStillShowsControls() {
+        assertTrue(MiniPlayerState.from(
+                true, PlaybackStateCompat.STATE_PLAYING).isVisible());
     }
 }

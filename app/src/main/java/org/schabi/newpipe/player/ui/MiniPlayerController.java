@@ -55,7 +55,7 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
     private MediaControllerCompat controller;
     private BottomSheetBehavior<View> bottomSheetBehavior;
     private MiniPlayerState state = MiniPlayerState.from(
-            false, null, PlaybackStateCompat.STATE_NONE);
+            false, PlaybackStateCompat.STATE_NONE);
     private boolean bottomSheetCallbackRegistered;
     private boolean updateBottomMarginOnNavigationLayout;
     private final View.OnLayoutChangeListener navigationLayoutChangeListener =
@@ -267,25 +267,19 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
 
     private void updateState(final MediaMetadataCompat metadata,
                              final PlaybackStateCompat playbackState) {
-        final CharSequence title = metadata == null
-                ? null : metadata.getText(MediaMetadataCompat.METADATA_KEY_TITLE);
         state = MiniPlayerState.from(
                 controller != null,
-                title,
                 playbackState == null ? PlaybackStateCompat.STATE_NONE : playbackState.getState());
 
         if (state.isVisible()) {
-            binding.miniPlayerTitle.setText(title);
-            final CharSequence creator =
-                    metadata.getText(MediaMetadataCompat.METADATA_KEY_ARTIST);
+            binding.miniPlayerTitle.setText(MiniPlayerMetadata.titleOrDefault(
+                    metadata, activity.getString(R.string.mini_player_now_playing)));
+            final CharSequence creator = MiniPlayerMetadata.creator(metadata);
             binding.miniPlayerCreator.setText(creator);
             binding.miniPlayerCreator.setVisibility(
                     creator == null || creator.length() == 0 ? View.GONE : View.VISIBLE);
 
-            Bitmap artwork = metadata.getBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART);
-            if (artwork == null) {
-                artwork = metadata.getBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON);
-            }
+            final Bitmap artwork = MiniPlayerMetadata.artwork(metadata);
             if (artwork == null) {
                 binding.miniPlayerThumbnail.setImageResource(
                         R.drawable.placeholder_thumbnail_video);
@@ -298,10 +292,6 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
                     activity.getString(state.isPlaying() ? R.string.pause : R.string.play));
         }
 
-        if (state.isVisible() && bottomSheetBehavior != null
-                && bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
         updateVisibility();
     }
 

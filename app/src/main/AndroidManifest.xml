@@ -95,7 +95,8 @@
         <activity
             android:name=".download.DownloadPlayerActivity"
             android:exported="false"
-            android:label="@string/downloads_title" />
+            android:label="@string/downloads_title"
+            android:screenOrientation="sensorLandscape" />
 
         <activity
             android:name=".about.AboutActivity"

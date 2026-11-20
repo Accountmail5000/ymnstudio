@@ -7,6 +7,14 @@ import org.schabi.newpipe.info_list.InfoItemBuilder;
 
 public class StreamGridInfoItemHolder extends StreamInfoItemHolder {
     public StreamGridInfoItemHolder(final InfoItemBuilder infoItemBuilder, final ViewGroup parent) {
-        super(infoItemBuilder, R.layout.list_stream_grid_item, parent);
+        this(infoItemBuilder, parent, false);
+    }
+
+    public StreamGridInfoItemHolder(final InfoItemBuilder infoItemBuilder,
+                                    final ViewGroup parent,
+                                    final boolean fullWidthThumbnail) {
+        super(infoItemBuilder, fullWidthThumbnail
+                ? R.layout.list_stream_grid_recommendation_item
+                : R.layout.list_stream_grid_item, parent);
     }
 }

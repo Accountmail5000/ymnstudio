@@ -167,6 +167,8 @@ public final class MainPlayerUi extends VideoPlayerUi implements View.OnLayoutCh
                 toggleFullscreen();
             }
         }));
+        binding.fullScreenButton.setOnClickListener(
+                makeOnClickListener(this::toggleFullscreen));
         binding.queueButton.setOnClickListener(v -> onQueueClicked());
         binding.segmentsButton.setOnClickListener(v -> onSegmentsClicked());
 
@@ -297,7 +299,7 @@ public final class MainPlayerUi extends VideoPlayerUi implements View.OnLayoutCh
 
         closeItemsList();
         showHideKodiButton();
-        binding.fullScreenButton.setVisibility(View.GONE);
+        setupFullscreenButton();
         setupScreenRotationButton();
         binding.resizeTextView.setVisibility(View.VISIBLE);
         binding.getRoot().findViewById(R.id.metadataView).setVisibility(View.VISIBLE);
@@ -942,6 +944,7 @@ public final class MainPlayerUi extends VideoPlayerUi implements View.OnLayoutCh
         }
 
         isFullscreen = !isFullscreen;
+        setupFullscreenButton();
         if (isFullscreen) {
             // Android needs tens milliseconds to send new insets but a user is able to see
             // how controls changes it's position from `0` to `nav bar height` padding.
@@ -957,6 +960,14 @@ public final class MainPlayerUi extends VideoPlayerUi implements View.OnLayoutCh
         binding.metadataView.setVisibility(isFullscreen ? View.VISIBLE : View.GONE);
         binding.playerCloseButton.setVisibility(isFullscreen ? View.GONE : View.VISIBLE);
         setupScreenRotationButton();
+    }
+
+    private void setupFullscreenButton() {
+        binding.fullScreenButton.setVisibility(View.VISIBLE);
+        binding.fullScreenButton.setImageDrawable(AppCompatResources.getDrawable(context,
+                isFullscreen ? R.drawable.ic_fullscreen_exit : R.drawable.ic_fullscreen));
+        binding.fullScreenButton.setContentDescription(
+                context.getString(R.string.toggle_fullscreen));
     }
 
     public void checkLandscape() {
