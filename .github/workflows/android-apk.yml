@@ -32,6 +32,8 @@ jobs:
           :app:testDebugUnitTest
           --tests org.schabi.newpipe.fragments.MainFragmentTest
           --tests org.schabi.newpipe.fragments.detail.VideoDetailFragmentTest
+          --tests org.schabi.newpipe.local.feed.FeedInitialLoadGateTest
+          --tests org.schabi.newpipe.player.ui.MiniPlayerStateTest
           -x :app:runKtlint
 
       - name: Build debug APK

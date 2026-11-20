@@ -74,6 +74,7 @@ import org.schabi.newpipe.player.Player;
 import org.schabi.newpipe.player.event.OnKeyDownListener;
 import org.schabi.newpipe.player.helper.PlayerHolder;
 import org.schabi.newpipe.player.playqueue.PlayQueue;
+import org.schabi.newpipe.player.ui.MiniPlayerController;
 import org.schabi.newpipe.settings.UpdateSettingsFragment;
 import org.schabi.newpipe.settings.migration.MigrationManager;
 import org.schabi.newpipe.util.Constants;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerHeaderBinding drawerHeaderBinding;
     private DrawerLayoutBinding drawerLayoutBinding;
     private ToolbarLayoutBinding toolbarLayoutBinding;
+    private MiniPlayerController miniPlayerController;
 
     private ActionBarDrawerToggle toggle;
 
@@ -167,6 +169,12 @@ public class MainActivity extends AppCompatActivity {
                 .getHeaderView(0));
         toolbarLayoutBinding = mainBinding.toolbarLayout;
         setContentView(mainBinding.getRoot());
+        miniPlayerController = new MiniPlayerController(
+                this,
+                mainBinding.mainBottomNavigation,
+                Objects.requireNonNull(findViewById(R.id.fragment_player_holder)),
+                this::openFullPlayer);
+        getLifecycle().addObserver(miniPlayerController);
 
         setupMainNavigation();
         getSupportFragmentManager().addOnBackStackChangedListener(
@@ -339,6 +347,14 @@ public class MainActivity extends AppCompatActivity {
         changingMainNavigation = true;
         mainBinding.mainBottomNavigation.setSelectedItemId(itemId);
         changingMainNavigation = false;
+    }
+
+    private void openFullPlayer() {
+        openMiniPlayerIfMissing();
+        final View playerHolder = findViewById(R.id.fragment_player_holder);
+        playerHolder.setVisibility(View.VISIBLE);
+        playerHolder.post(() -> BottomSheetBehavior.from(playerHolder)
+                .setState(BottomSheetBehavior.STATE_EXPANDED));
     }
 
     /**

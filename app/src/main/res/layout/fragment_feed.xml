@@ -81,7 +81,7 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:visibility="gone"
-            tools:listitem="@layout/list_stream_item"
+            tools:listitem="@layout/list_stream_home_grid_item"
             tools:visibility="visible" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

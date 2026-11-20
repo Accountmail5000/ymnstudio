@@ -42,12 +42,13 @@ data class StreamItem(
 
     override fun getId(): Long = stream.uid
 
-    enum class ItemVersion { NORMAL, MINI, GRID, CARD }
+    enum class ItemVersion { NORMAL, MINI, GRID, HOME_GRID, CARD }
 
     override fun getLayout(): Int = when (itemVersion) {
         ItemVersion.NORMAL -> R.layout.list_stream_item
         ItemVersion.MINI -> R.layout.list_stream_mini_item
         ItemVersion.GRID -> R.layout.list_stream_grid_item
+        ItemVersion.HOME_GRID -> R.layout.list_stream_home_grid_item
         ItemVersion.CARD -> R.layout.list_stream_card_item
     }
 
@@ -156,6 +157,10 @@ data class StreamItem(
     }
 
     override fun getSpanSize(spanCount: Int, position: Int): Int {
-        return if (itemVersion == ItemVersion.GRID) 1 else spanCount
+        return if (itemVersion == ItemVersion.GRID || itemVersion == ItemVersion.HOME_GRID) {
+            1
+        } else {
+            spanCount
+        }
     }
 }

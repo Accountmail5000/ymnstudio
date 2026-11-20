@@ -311,6 +311,7 @@
         <item quantity="other">%s listeners</item>
     </plurals>
     <string name="no_videos">No videos</string>
+    <string name="feed_empty_state_message">No videos in your feed yet. Subscribe to channels to see new uploads here.</string>
     <string name="more_than_100_videos">100+ videos</string>
     <string name="infinite_videos">∞ videos</string>
     <plurals name="videos">

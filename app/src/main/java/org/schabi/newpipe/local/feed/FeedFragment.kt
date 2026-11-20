@@ -68,7 +68,6 @@ import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
 import org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty
 import org.schabi.newpipe.fragments.BaseStateFragment
-import org.schabi.newpipe.info_list.ItemViewMode
 import org.schabi.newpipe.info_list.dialog.InfoItemDialog
 import org.schabi.newpipe.ktx.animate
 import org.schabi.newpipe.ktx.animateHideRecyclerViewAllowingScrolling
@@ -80,15 +79,14 @@ import org.schabi.newpipe.util.DeviceUtils
 import org.schabi.newpipe.util.Localization
 import org.schabi.newpipe.util.NavigationHelper
 import org.schabi.newpipe.util.ThemeHelper.getGridSpanCountStreams
-import org.schabi.newpipe.util.ThemeHelper.getItemViewMode
 import org.schabi.newpipe.util.ThemeHelper.resolveDrawable
-import org.schabi.newpipe.util.ThemeHelper.shouldUseGridLayout
 
 class FeedFragment : BaseStateFragment<FeedState>() {
     private var _feedBinding: FragmentFeedBinding? = null
     private val feedBinding get() = _feedBinding!!
 
     private val disposables = CompositeDisposable()
+    private val initialFeedLoadGate = FeedInitialLoadGate()
 
     private lateinit var viewModel: FeedViewModel
 
@@ -139,7 +137,14 @@ class FeedFragment : BaseStateFragment<FeedState>() {
 
         val factory = FeedViewModel.getFactory(requireContext(), groupId)
         viewModel = ViewModelProvider(this, factory)[FeedViewModel::class.java]
-        viewModel.stateLiveData.observe(viewLifecycleOwner) { it?.let(::handleResult) }
+        viewModel.stateLiveData.observe(viewLifecycleOwner) {
+            if (it != null && initialFeedLoadGate.shouldLoadEmptyFeed(it)) {
+                showLoading()
+                reloadContent()
+            } else {
+                it?.let(::handleResult)
+            }
+        }
 
         groupAdapter = GroupieAdapter().apply {
             setOnItemClickListener(listenerStreamItem)
@@ -197,8 +202,7 @@ class FeedFragment : BaseStateFragment<FeedState>() {
     }
 
     private fun setupListViewMode() {
-        // does everything needed to setup the layouts for grid or list modes
-        groupAdapter.spanCount = if (shouldUseGridLayout(context)) getGridSpanCountStreams(context) else 1
+        groupAdapter.spanCount = getGridSpanCountStreams(context)
         feedBinding.itemsList.layoutManager = GridLayoutManager(requireContext(), groupAdapter.spanCount).apply {
             spanSizeLookup = groupAdapter.spanSizeLookup
         }
@@ -337,6 +341,7 @@ class FeedFragment : BaseStateFragment<FeedState>() {
 
     override fun showEmptyState() {
         super.showEmptyState()
+        emptyStateMessageView?.setText(R.string.feed_empty_state_message)
         feedBinding.itemsList.animateHideRecyclerViewAllowingScrolling()
         feedBinding.refreshRootView.animate(true, 200)
         feedBinding.loadingProgressText.animate(false, 0)
@@ -418,12 +423,7 @@ class FeedFragment : BaseStateFragment<FeedState>() {
 
     @SuppressLint("StringFormatMatches")
     private fun handleLoadedState(loadedState: FeedState.LoadedState) {
-        val itemVersion = when (getItemViewMode(requireContext())) {
-            ItemViewMode.GRID -> StreamItem.ItemVersion.GRID
-            ItemViewMode.CARD -> StreamItem.ItemVersion.CARD
-            else -> StreamItem.ItemVersion.NORMAL
-        }
-        loadedState.items.forEach { it.itemVersion = itemVersion }
+        loadedState.items.forEach { it.itemVersion = StreamItem.ItemVersion.HOME_GRID }
 
         // This need to be saved in a variable as the update occurs async
         val oldOldestSubscriptionUpdate = oldestSubscriptionUpdate
@@ -676,8 +676,6 @@ class FeedFragment : BaseStateFragment<FeedState>() {
     // /////////////////////////////////////////////////////////////////////////
     // Load Service Handling
     // /////////////////////////////////////////////////////////////////////////
-
-    override fun doInitialLoadLogic() {}
 
     override fun reloadContent() {
         hideNewItemsLoaded(false)
