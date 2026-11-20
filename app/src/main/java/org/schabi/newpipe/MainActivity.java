@@ -74,7 +74,6 @@ import org.schabi.newpipe.player.Player;
 import org.schabi.newpipe.player.event.OnKeyDownListener;
 import org.schabi.newpipe.player.helper.PlayerHolder;
 import org.schabi.newpipe.player.playqueue.PlayQueue;
-import org.schabi.newpipe.player.ui.MiniPlayerController;
 import org.schabi.newpipe.settings.UpdateSettingsFragment;
 import org.schabi.newpipe.settings.migration.MigrationManager;
 import org.schabi.newpipe.util.Constants;
@@ -105,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawerHeaderBinding drawerHeaderBinding;
     private DrawerLayoutBinding drawerLayoutBinding;
     private ToolbarLayoutBinding toolbarLayoutBinding;
-    private MiniPlayerController miniPlayerController;
 
     private ActionBarDrawerToggle toggle;
 
@@ -169,12 +167,6 @@ public class MainActivity extends AppCompatActivity {
                 .getHeaderView(0));
         toolbarLayoutBinding = mainBinding.toolbarLayout;
         setContentView(mainBinding.getRoot());
-        miniPlayerController = new MiniPlayerController(
-                this,
-                mainBinding.mainBottomNavigation,
-                Objects.requireNonNull(findViewById(R.id.fragment_player_holder)),
-                this::openFullPlayer);
-        getLifecycle().addObserver(miniPlayerController);
 
         setupMainNavigation();
         getSupportFragmentManager().addOnBackStackChangedListener(
@@ -920,12 +912,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openMiniPlayerIfMissing() {
+        if (!PlayerHolder.getInstance().isPlayerOpen()) {
+            mainBinding.fragmentPlayerHolder.setVisibility(View.GONE);
+            return;
+        }
         final Fragment fragmentPlayer = getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_player_holder);
         if (fragmentPlayer == null) {
             // We still don't have a fragment attached to the activity. It can happen when a user
             // started popup or background players without opening a stream inside the fragment.
             // Adding it in a collapsed state (only mini player will be visible).
+            mainBinding.fragmentPlayerHolder.setVisibility(View.VISIBLE);
             NavigationHelper.showMiniPlayer(getSupportFragmentManager());
         }
     }

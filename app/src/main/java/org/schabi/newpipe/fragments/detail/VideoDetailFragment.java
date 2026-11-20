@@ -2537,6 +2537,11 @@ public final class VideoDetailFragment
 
                         bottomSheetBehavior.setPeekHeight(0);
                         cleanUp();
+                        bottomSheetLayout.setVisibility(View.GONE);
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .remove(VideoDetailFragment.this)
+                                .commitAllowingStateLoss();
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED:
                         moveFocusToMainFragment(false);
