@@ -3,7 +3,6 @@ package org.schabi.newpipe.player.ui;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.graphics.Bitmap;
-import android.os.RemoteException;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -75,14 +74,9 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
                         return;
                     }
 
-                    try {
-                        controller = new MediaControllerCompat(activity, browser.getSessionToken());
-                        controller.registerCallback(mediaControllerCallback);
-                        renderPlayer();
-                    } catch (final RemoteException e) {
-                        Log.e(TAG, "Could not connect to the playback session", e);
-                        updateState(null, null);
-                    }
+                    controller = new MediaControllerCompat(activity, browser.getSessionToken());
+                    controller.registerCallback(mediaControllerCallback);
+                    renderPlayer();
                 }
 
                 @Override
