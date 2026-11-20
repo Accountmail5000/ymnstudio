@@ -71,6 +71,7 @@ import org.schabi.newpipe.util.SimpleOnSeekBarChangeListener;
 import org.schabi.newpipe.util.StreamItemAdapter;
 import org.schabi.newpipe.util.StreamItemAdapter.StreamInfoWrapper;
 import org.schabi.newpipe.util.ThemeHelper;
+import org.schabi.newpipe.util.image.CoilHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -300,6 +301,12 @@ public class DownloadDialog extends DialogFragment
 
         dialogBinding.fileName.setText(FilenameUtils.createFilename(getContext(),
                 currentInfo.getName()));
+        dialogBinding.downloadVideoTitle.setText(currentInfo.getName());
+        dialogBinding.downloadVideoUploader.setText(currentInfo.getUploaderName());
+        CoilHelper.INSTANCE.loadDetailsThumbnail(dialogBinding.downloadThumbnail,
+                currentInfo.getThumbnails());
+        dialogBinding.downloadThumbnail.setContentDescription(getString(
+                R.string.download_thumbnail_description, currentInfo.getName()));
         selectedAudioIndex = ListHelper.getDefaultAudioFormat(getContext(),
                 getWrappedAudioStreams().getStreamsList());
 

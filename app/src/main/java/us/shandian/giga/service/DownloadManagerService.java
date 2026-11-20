@@ -69,6 +69,7 @@ public class DownloadManagerService extends Service {
 
     private static final int FOREGROUND_NOTIFICATION_ID = 1000;
     private static final int DOWNLOADS_NOTIFICATION_ID = 1001;
+    private static final long DOWNLOAD_NOTIFICATION_UPDATE_INTERVAL_MS = 1000;
 
     private static final String EXTRA_URLS = "DownloadManagerService.extra.urls";
     private static final String EXTRA_KIND = "DownloadManagerService.extra.kind";
@@ -88,6 +89,7 @@ public class DownloadManagerService extends Service {
     private DownloadManagerBinder mBinder;
     private DownloadManager mManager;
     private Notification mNotification;
+    private Builder mDownloadProgressNotificationBuilder;
     private Handler mHandler;
     private boolean mForeground = false;
     private NotificationManager mNotificationManager = null;
@@ -118,6 +120,17 @@ public class DownloadManagerService extends Service {
     private Bitmap icDownloadFailed;
 
     private PendingIntent mOpenDownloadList;
+
+    private final Runnable mUpdateDownloadProgressNotification = new Runnable() {
+        @Override
+        public void run() {
+            if (!mForeground || mManager == null) {
+                return;
+            }
+            updateDownloadProgressNotification();
+            mHandler.postDelayed(this, DOWNLOAD_NOTIFICATION_UPDATE_INTERVAL_MS);
+        }
+    };
 
     /**
      * notify media scanner on downloaded media file ...
@@ -152,14 +165,15 @@ public class DownloadManagerService extends Service {
 
         icLauncher = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_launcher);
 
-        Builder builder = new Builder(this, getString(R.string.notification_channel_id))
+        mDownloadProgressNotificationBuilder =
+                new Builder(this, getString(R.string.notification_channel_id))
                 .setContentIntent(mOpenDownloadList)
                 .setSmallIcon(android.R.drawable.stat_sys_download)
                 .setLargeIcon(icLauncher)
                 .setContentTitle(getString(R.string.msg_running))
                 .setContentText(getString(R.string.msg_running_detail));
 
-        mNotification = builder.build();
+        mNotification = mDownloadProgressNotificationBuilder.build();
 
         mNotificationManager = ContextCompat.getSystemService(this,
                 NotificationManager.class);
@@ -244,6 +258,7 @@ public class DownloadManagerService extends Service {
         if (icDownloadFailed != null) icDownloadFailed.recycle();
         if (icLauncher != null) icLauncher.recycle();
 
+        mHandler.removeCallbacks(mUpdateDownloadProgressNotification);
         mHandler = null;
         mManager.pauseAllMissions(true);
     }
@@ -265,17 +280,24 @@ public class DownloadManagerService extends Service {
                 mManager.setFinished(mission);
                 handleConnectivityState(false);
                 updateForegroundState(mManager.runMissions());
+                updateDownloadProgressNotification();
                 break;
             case MESSAGE_RUNNING:
                 updateForegroundState(true);
+                updateDownloadProgressNotification();
+                mHandler.removeCallbacks(mUpdateDownloadProgressNotification);
+                mHandler.postDelayed(mUpdateDownloadProgressNotification,
+                        DOWNLOAD_NOTIFICATION_UPDATE_INTERVAL_MS);
                 break;
             case MESSAGE_ERROR:
                 notifyFailedDownload(mission);
                 handleConnectivityState(false);
                 updateForegroundState(mManager.runMissions());
+                updateDownloadProgressNotification();
                 break;
             case MESSAGE_PAUSED:
                 updateForegroundState(mManager.getRunningMissionsCount() > 0);
+                updateDownloadProgressNotification();
                 break;
         }
 
@@ -336,13 +358,42 @@ public class DownloadManagerService extends Service {
 
         if (state) {
             startForeground(FOREGROUND_NOTIFICATION_ID, mNotification);
+            mNotificationManager.notify(FOREGROUND_NOTIFICATION_ID,
+                    mDownloadProgressNotificationBuilder.build());
         } else {
+            mHandler.removeCallbacks(mUpdateDownloadProgressNotification);
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
         }
 
         manageLock(state);
 
         mForeground = state;
+    }
+
+    private void updateDownloadProgressNotification() {
+        if (mManager == null || mDownloadProgressNotificationBuilder == null
+                || !mForeground) {
+            return;
+        }
+
+        final DownloadProgressSnapshot snapshot = mManager.getDownloadProgressSnapshot();
+        if (snapshot == null) {
+            return;
+        }
+
+        mDownloadProgressNotificationBuilder
+                .setContentTitle(snapshot.fileName)
+                .setContentText(getString(R.string.download_progress_notification_text,
+                        snapshot.position, snapshot.total,
+                        snapshot.percent == DownloadProgressSnapshot.UNKNOWN_PERCENT
+                                ? getString(R.string.download_progress_unknown_percent)
+                                : getString(R.string.download_progress_percent,
+                                        snapshot.percent)))
+                .setProgress(100, Math.max(0, snapshot.percent),
+                        snapshot.percent == DownloadProgressSnapshot.UNKNOWN_PERCENT)
+                .setOngoing(true);
+        mNotification = mDownloadProgressNotificationBuilder.build();
+        mNotificationManager.notify(FOREGROUND_NOTIFICATION_ID, mNotification);
     }
 
     /**
@@ -371,12 +422,12 @@ public class DownloadManagerService extends Service {
                 .putExtra(EXTRA_POSTPROCESSING_NAME, psName)
                 .putExtra(EXTRA_POSTPROCESSING_ARGS, psArgs)
                 .putExtra(EXTRA_NEAR_LENGTH, nearLength)
-                .putExtra(EXTRA_RECOVERY_INFO, recoveryInfo)
                 .putExtra(EXTRA_PARENT_PATH, storage.getParentUri())
                 .putExtra(EXTRA_PATH, storage.getUri())
                 .putExtra(EXTRA_STORAGE_TAG, storage.getTag())
                 .putExtra(EXTRA_STREAM_INFO, streamInfo);
 
+        putRecoveryInfo(intent, recoveryInfo);
         context.startService(intent);
     }
 
@@ -391,8 +442,7 @@ public class DownloadManagerService extends Service {
         long nearLength = intent.getLongExtra(EXTRA_NEAR_LENGTH, 0);
         String tag = intent.getStringExtra(EXTRA_STORAGE_TAG);
         StreamInfo streamInfo = (StreamInfo)intent.getSerializableExtra(EXTRA_STREAM_INFO);
-        final var recovery = IntentCompat.getParcelableArrayListExtra(intent, EXTRA_RECOVERY_INFO,
-                MissionRecoveryInfo.class);
+        final var recovery = getRecoveryInfo(intent);
         Objects.requireNonNull(recovery);
 
         StoredFileHelper storage;
@@ -422,6 +472,17 @@ public class DownloadManagerService extends Service {
         mManager.startMission(mission);
     }
 
+    static void putRecoveryInfo(final Intent intent,
+                                final ArrayList<MissionRecoveryInfo> recoveryInfo) {
+        intent.putParcelableArrayListExtra(EXTRA_RECOVERY_INFO, recoveryInfo);
+    }
+
+    @Nullable
+    static ArrayList<MissionRecoveryInfo> getRecoveryInfo(final Intent intent) {
+        return IntentCompat.getParcelableArrayListExtra(intent, EXTRA_RECOVERY_INFO,
+                MissionRecoveryInfo.class);
+    }
+
     public void notifyFinishedDownload(String name) {
         if (!mDownloadNotificationEnable || mNotificationManager == null) {
             return;
@@ -443,10 +504,10 @@ public class DownloadManagerService extends Service {
         if (downloadDoneCount == 1) {
             downloadDoneList.append(name);
 
-            downloadDoneNotification.setContentTitle(null);
-            downloadDoneNotification.setContentText(Localization.downloadCount(this, downloadDoneCount));
+            downloadDoneNotification.setContentTitle(getString(R.string.download_complete));
+            downloadDoneNotification.setContentText(name);
             downloadDoneNotification.setStyle(new NotificationCompat.BigTextStyle()
-                    .setBigContentTitle(Localization.downloadCount(this, downloadDoneCount))
+                    .setBigContentTitle(getString(R.string.download_complete))
                     .bigText(name)
             );
         } else {

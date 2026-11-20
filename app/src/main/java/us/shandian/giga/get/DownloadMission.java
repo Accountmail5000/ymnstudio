@@ -593,7 +593,7 @@ public class DownloadMission extends Mission {
         switch (errCode) {
             case ERROR_POSTPROCESSING:
             case ERROR_POSTPROCESSING_STOPPED:
-                return psAlgorithm.worksOnSameFile;
+                return psAlgorithm != null && psAlgorithm.worksOnSameFile;
         }
 
         return false;

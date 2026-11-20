@@ -428,6 +428,42 @@ public class DownloadManager {
         }
     }
 
+    @Nullable
+    public DownloadProgressSnapshot getDownloadProgressSnapshot() {
+        synchronized (this) {
+            final ArrayList<DownloadMission> activeOrQueued = new ArrayList<>();
+            DownloadMission currentMission = null;
+            int currentIndex = -1;
+
+            for (DownloadMission mission : mMissionsPending) {
+                if ((!mission.running && !mission.enqueued)
+                        || mission.isFinished() || mission.isPsFailed()) {
+                    continue;
+                }
+                activeOrQueued.add(mission);
+                if (mission.running && currentMission == null) {
+                    currentMission = mission;
+                    currentIndex = activeOrQueued.size() - 1;
+                }
+            }
+
+            if (activeOrQueued.isEmpty()) {
+                return null;
+            }
+            if (currentMission == null) {
+                currentMission = activeOrQueued.get(0);
+                currentIndex = 0;
+            }
+
+            return new DownloadProgressSnapshot(
+                    currentMission.storage.getName(),
+                    currentIndex + 1,
+                    activeOrQueued.size(),
+                    DownloadProgressSnapshot.percent(currentMission.done,
+                            currentMission.length, currentMission.unknownLength));
+        }
+    }
+
     public void pauseAllMissions(boolean force) {
         synchronized (this) {
             for (DownloadMission mission : mMissionsPending) {

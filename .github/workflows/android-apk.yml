@@ -42,6 +42,7 @@ jobs:
           --tests org.schabi.newpipe.fragments.list.recommendations.RecommendationGridPolicyTest
           --tests org.schabi.newpipe.download.DownloadLinkInputTest
           --tests us.shandian.giga.service.DownloadProgressCalculatorTest
+          --tests us.shandian.giga.service.DownloadProgressSnapshotTest
           -x :app:runKtlint
 
       - name: Build debug APK
@@ -49,6 +50,18 @@ jobs:
           ./gradlew --no-daemon -DskipFormatKtlint=true
           assembleDebug assembleDebugAndroidTest
           -x :app:runKtlint
+
+      - name: Run Android regression tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          script: >-
+            ./gradlew --no-daemon -DskipFormatKtlint=true
+            :app:connectedDebugAndroidTest
+            -x :app:runKtlint
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v7

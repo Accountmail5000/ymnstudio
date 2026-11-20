@@ -22,6 +22,14 @@
     <string name="download_link_unsupported">This source is not supported for downloads.</string>
     <string name="download_link_clipboard_empty">There is no link in the clipboard.</string>
     <string name="download_progress_accessibility">Downloads, %1$d percent complete</string>
+    <string name="downloads_progress_label">%1$d%%</string>
+    <string name="download_progress_badge">%1$d%%</string>
+    <string name="download_progress_notification_text">%1$d of %2$d downloads • %3$s</string>
+    <string name="download_progress_percent">%1$d%%</string>
+    <string name="download_progress_unknown_percent">Calculating…</string>
+    <string name="download_complete">Download complete</string>
+    <string name="download_thumbnail_description">Thumbnail for %1$s</string>
+    <string name="download_format_quality">Format and quality</string>
     <string name="controls_download_desc">Download stream file</string>
     <string name="search">Search</string>
     <string name="search_with_service_name">Search %1$s</string>
