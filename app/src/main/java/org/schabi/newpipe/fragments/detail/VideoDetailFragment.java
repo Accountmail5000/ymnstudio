@@ -290,7 +290,7 @@ public final class VideoDetailFragment
         }
 
         player.UIs().get(MainPlayerUi.class)
-                .ifPresent(playerUi -> applyFullscreenChrome(playerUi.isFullscreen()));
+                .ifPresent(connectedUi -> applyFullscreenChrome(connectedUi.isFullscreen()));
 
         if (playAfterConnect
                 || (currentInfo != null
