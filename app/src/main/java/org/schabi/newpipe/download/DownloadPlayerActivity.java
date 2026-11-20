@@ -25,6 +25,8 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.util.ServiceHelper;
+import org.schabi.newpipe.util.ThemeHelper;
 
 public class DownloadPlayerActivity extends AppCompatActivity {
     private static final String TAG = "DownloadPlayerActivity";
@@ -37,6 +39,7 @@ public class DownloadPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        ThemeHelper.setTheme(this, ServiceHelper.getSelectedServiceId(this));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_player);
 

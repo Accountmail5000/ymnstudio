@@ -446,15 +446,23 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         try {
             retriever.setDataSource(mContext, uri);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                final Bitmap scaledFrame = retriever.getScaledFrameAtTime(1_000_000L,
-                        MediaMetadataRetriever.OPTION_CLOSEST_SYNC, 320, 180);
-                if (scaledFrame != null) {
-                    return scaledFrame;
+                try {
+                    final Bitmap scaledFrame = retriever.getScaledFrameAtTime(1_000_000L,
+                            MediaMetadataRetriever.OPTION_CLOSEST_SYNC, 320, 180);
+                    if (scaledFrame != null) {
+                        return scaledFrame;
+                    }
+                } catch (final RuntimeException e) {
+                    Log.w(TAG, "Scaled video thumbnail extraction failed; trying fallback", e);
                 }
             }
 
-            final Bitmap frame = retriever.getFrameAtTime(1_000_000L,
+            Bitmap frame = retriever.getFrameAtTime(1_000_000L,
                     MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            if (frame == null) {
+                frame = retriever.getFrameAtTime(0L,
+                        MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            }
             if (frame == null || (frame.getWidth() <= 320 && frame.getHeight() <= 180)) {
                 return frame;
             }

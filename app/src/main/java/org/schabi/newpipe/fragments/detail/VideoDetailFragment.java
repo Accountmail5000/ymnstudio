@@ -1168,9 +1168,18 @@ public final class VideoDetailFragment
         final PlayQueue queue = setupPlayQueueForIntent(append);
         if (append) {
             NavigationHelper.enqueueOnPlayer(activity, queue, PlayerType.AUDIO);
+            collapseToMiniPlayer();
         } else {
-            replaceQueueIfUserConfirms(() -> NavigationHelper
-                    .playOnBackgroundPlayer(activity, queue, true));
+            replaceQueueIfUserConfirms(() -> {
+                NavigationHelper.playOnBackgroundPlayer(activity, queue, true);
+                collapseToMiniPlayer();
+            });
+        }
+    }
+
+    private void collapseToMiniPlayer() {
+        if (bottomSheetBehavior != null) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
     }
 
@@ -1442,8 +1451,8 @@ public final class VideoDetailFragment
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                         break;
                     case ACTION_PLAYER_STARTED:
-                        // If the state is not hidden we don't need to show the mini player
-                        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                        if (shouldCollapseMiniPlayer(playerHolder.getType(),
+                                bottomSheetBehavior.getState())) {
                             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         }
                         // Rebound to the service if it was closed via notification or mini player
@@ -1461,6 +1470,12 @@ public final class VideoDetailFragment
         intentFilter.addAction(ACTION_PLAYER_STARTED);
         ContextCompat.registerReceiver(activity, broadcastReceiver, intentFilter,
                 ContextCompat.RECEIVER_EXPORTED);
+    }
+
+    static boolean shouldCollapseMiniPlayer(@Nullable final PlayerType playerType,
+                                            final int bottomSheetState) {
+        return playerType == PlayerType.AUDIO
+                || bottomSheetState == BottomSheetBehavior.STATE_HIDDEN;
     }
 
 

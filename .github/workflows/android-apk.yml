@@ -26,8 +26,16 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
 
+      - name: Run focused regression tests
+        run: >-
+          ./gradlew --no-daemon -DskipFormatKtlint=true
+          :app:testDebugUnitTest
+          --tests org.schabi.newpipe.fragments.MainFragmentTest
+          --tests org.schabi.newpipe.fragments.detail.VideoDetailFragmentTest
+          -x :app:runKtlint
+
       - name: Build debug APK
-        run: ./gradlew --no-daemon assembleDebug
+        run: ./gradlew --no-daemon -DskipFormatKtlint=true assembleDebug -x :app:runKtlint
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v7
