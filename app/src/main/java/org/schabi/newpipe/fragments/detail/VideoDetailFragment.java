@@ -1511,7 +1511,8 @@ public final class VideoDetailFragment
             public void onReceive(final Context context, final Intent intent) {
                 switch (intent.getAction()) {
                     case ACTION_SHOW_MAIN_PLAYER:
-                        bottomSheetBehavior.getView().setVisibility(View.VISIBLE);
+                        activity.findViewById(R.id.fragment_player_holder)
+                                .setVisibility(View.VISIBLE);
                         bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(
                                 R.dimen.mini_player_height));
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
