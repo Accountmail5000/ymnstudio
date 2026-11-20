@@ -9,31 +9,29 @@ final class MiniPlayerMetadata {
     private MiniPlayerMetadata() {
     }
 
-    static CharSequence titleOrDefault(@Nullable final MediaMetadataCompat metadata,
+    static CharSequence titleOrDefault(@Nullable final CharSequence displayTitle,
+                                       @Nullable final CharSequence title,
                                        final CharSequence defaultTitle) {
-        final CharSequence displayTitle = getNonEmptyText(
-                metadata, MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE);
-        if (displayTitle != null) {
-            return displayTitle;
+        final CharSequence nonEmptyDisplayTitle = getNonEmptyText(displayTitle);
+        if (nonEmptyDisplayTitle != null) {
+            return nonEmptyDisplayTitle;
         }
 
-        final CharSequence title = getNonEmptyText(
-                metadata, MediaMetadataCompat.METADATA_KEY_TITLE);
-        return title == null ? defaultTitle : title;
+        final CharSequence nonEmptyTitle = getNonEmptyText(title);
+        return nonEmptyTitle == null ? defaultTitle : nonEmptyTitle;
     }
 
     @Nullable
-    static CharSequence creator(@Nullable final MediaMetadataCompat metadata) {
-        final CharSequence displaySubtitle = getNonEmptyText(
-                metadata, MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE);
-        if (displaySubtitle != null) {
-            return displaySubtitle;
+    static CharSequence creator(@Nullable final CharSequence displaySubtitle,
+                                @Nullable final CharSequence artist,
+                                @Nullable final CharSequence albumArtist) {
+        final CharSequence nonEmptyDisplaySubtitle = getNonEmptyText(displaySubtitle);
+        if (nonEmptyDisplaySubtitle != null) {
+            return nonEmptyDisplaySubtitle;
         }
 
-        final CharSequence artist = getNonEmptyText(
-                metadata, MediaMetadataCompat.METADATA_KEY_ARTIST);
-        return artist != null ? artist : getNonEmptyText(
-                metadata, MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST);
+        final CharSequence nonEmptyArtist = getNonEmptyText(artist);
+        return nonEmptyArtist != null ? nonEmptyArtist : getNonEmptyText(albumArtist);
     }
 
     @Nullable
@@ -47,12 +45,7 @@ final class MiniPlayerMetadata {
     }
 
     @Nullable
-    private static CharSequence getNonEmptyText(@Nullable final MediaMetadataCompat metadata,
-                                               final String key) {
-        if (metadata == null) {
-            return null;
-        }
-        final CharSequence value = metadata.getText(key);
+    private static CharSequence getNonEmptyText(@Nullable final CharSequence value) {
         return value == null || value.toString().trim().isEmpty() ? null : value;
     }
 }

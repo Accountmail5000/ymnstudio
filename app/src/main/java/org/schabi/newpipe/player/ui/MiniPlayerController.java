@@ -272,9 +272,20 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
                 playbackState == null ? PlaybackStateCompat.STATE_NONE : playbackState.getState());
 
         if (state.isVisible()) {
+            final CharSequence displayTitle = metadata == null ? null
+                    : metadata.getText(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE);
+            final CharSequence title = metadata == null ? null
+                    : metadata.getText(MediaMetadataCompat.METADATA_KEY_TITLE);
             binding.miniPlayerTitle.setText(MiniPlayerMetadata.titleOrDefault(
-                    metadata, activity.getString(R.string.mini_player_now_playing)));
-            final CharSequence creator = MiniPlayerMetadata.creator(metadata);
+                    displayTitle, title, activity.getString(R.string.mini_player_now_playing)));
+            final CharSequence displaySubtitle = metadata == null ? null
+                    : metadata.getText(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE);
+            final CharSequence artist = metadata == null ? null
+                    : metadata.getText(MediaMetadataCompat.METADATA_KEY_ARTIST);
+            final CharSequence albumArtist = metadata == null ? null
+                    : metadata.getText(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST);
+            final CharSequence creator = MiniPlayerMetadata.creator(
+                    displaySubtitle, artist, albumArtist);
             binding.miniPlayerCreator.setText(creator);
             binding.miniPlayerCreator.setVisibility(
                     creator == null || creator.length() == 0 ? View.GONE : View.VISIBLE);
