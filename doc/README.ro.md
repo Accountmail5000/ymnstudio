@@ -1,5 +1,5 @@
-<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p> 
-<h2 align="center"><b>NewPipe</b></h2>
+<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p>
+<h2 align="center"><b>YmnTube</b></h2>
 <h4 align="center">Un front-end de streaming „uşor” liber, pentru Android.</h4>
 
 <p align="center"><a href="https://f-droid.org/packages/org.schabi.newpipe/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-ro.svg" alt="Get it on F-Droid" width=206/></a></p>
@@ -27,7 +27,7 @@
 > [!warning]
 > <b>ACEASTA ESTE O VERSIUNE BETA, AŞA CĂ S-AR PUTE SĂ ÎNTÂLNIŢI ERORI. DACĂ SE ÎNTÂMPLĂ ACEST LUCRU, DESCHIDEŢI UN ISSUE PRIN REPSITORY-UL NOSTRU GITHUB.</b>
 >
-> <b>PUNERA NEWPIPE SAU ORICĂRUI FORK AL ACESTUIA ÎN MAGAZINUL GOOGLE PLAY LE ÎNCALCĂ TERMENII ŞI CONDIŢIILE.</b>
+> <b>PUNERA YMNTUBE SAU ORICĂRUI FORK AL ACESTUIA ÎN MAGAZINUL GOOGLE PLAY LE ÎNCALCĂ TERMENII ŞI CONDIŢIILE.</b>
 
 ## Capturi de ecran
 
@@ -46,7 +46,7 @@
 
 ## Descriere
 
-NewPipe nu foloseşte nici-o bibliotecă Google framework sau API-ul Youtube. Website-urile sunt doar analizate pentru a prelua informaţia necesară, aşa că această aplicaţie poate fi folosită pe telefoane fără Serviciile Google instalate. De asemenea, nu aveţi nevoie de un cont Youtube pentru a folosi Newpipe, care este sofware liber şi copylefted.
+YmnTube nu foloseşte nici-o bibliotecă Google framework sau API-ul Youtube. Website-urile sunt doar analizate pentru a prelua informaţia necesară, aşa că această aplicaţie poate fi folosită pe telefoane fără Serviciile Google instalate. De asemenea, nu aveţi nevoie de un cont Youtube pentru a folosi Newpipe, care este sofware liber şi copylefted.
 
 ### Funcţii
 
@@ -93,7 +93,7 @@ NewPipe suportă servicii multiple. [Documentele](https://teamnewpipe.github.io/
 <span id="updates"></span>
 
 ## Instalare şi actualizări
-Puteţi instala NewPipe folosind una dintre următoarele metode:
+Puteţi instala YmnTube folosind una dintre următoarele metode:
  1. Adăugaţi depozitul nostru F-droid personalizat. Instrucţiunile sunt aici: https://newpipe.net/FAQ/tutorials/install-add-fdroid-repo/
  2. Descărcaţi APK-ul din [GitHub Releases](https://github.com/TeamNewPipe/NewPipe/releases) şi instalaţi-l.
  3. Actualizaţi via F-Droid. Aceasta este cea mai lentă metodă de a obţine actualizări, deoarece F-Droid trebuie să recunoască schimbările, să constriască APK-ul, să îl semneze, iar apoi să îl trimită utilizatorilor.
@@ -101,9 +101,9 @@ Puteţi instala NewPipe folosind una dintre următoarele metode:
 
 Recomandăm metoda 1 pentru majoritatea utilizatorilor. APK-urile din metodele 1 şi 2 suntcompatibile una cu cealaltă, dar nu cu cele din metoda 3. Acest lucru se datorează faptului că aceeași cheie de semnare (a noastră) este utilizată pentru 1 și 2, dar o altă cheie de semnare (F-Droid) este utilizată pentru 3. Construirea unui APK de depanare folosind metoda 4 exclude o cheie în întregime. Cheile de semnare vă asigură că un utilizator nu este păcălit să instaleze o actualizare rău intenționată a unei aplicații.
 
-Între timp, dacă doriți să schimbați sursa dintr-un anumit motiv (de exemplu, funcționalitatea de bază a NewPipe a fost întreruptă și F-Droid nu are încă actualizarea), vă recomandăm să folosiţi următoarea procedură:
+Între timp, dacă doriți să schimbați sursa dintr-un anumit motiv (de exemplu, funcționalitatea de bază a YmnTube a fost întreruptă și F-Droid nu are încă actualizarea), vă recomandăm să folosiţi următoarea procedură:
 1. Faceți o copie de rezervă a datelor prin Setări> Conținut> Exportați baza de date, astfel încât să vă păstrați istoricul, abonamentele și playlisturile
-2. Dezinstalaţi NewPipe
+2. Dezinstalaţi YmnTube
 3. Descărcaţi APK-ul din noua sursă şi instalaţi-l
 4. Importați datele de la pasul 1 prin Setări> Conținut> Importare bază de date
 
@@ -130,12 +130,12 @@ Dacă vă place NewPipe, am fi bucuroşi să primim o donaţie. Puteţi să ne t
 
 ## Politica de Confidenţialitate
 
-Proiectul NewPipe îşi propune să furnizeze o experienţă privată şi anonimă pentru utilizarea serviciilor web media.
+Proiectul YmnTube îşi propune să furnizeze o experienţă privată şi anonimă pentru utilizarea serviciilor web media.
 Prin urmare, aplicaţia nu colectează niciun fel de informaţii fără acordul dumneavoastră. Politica de confidențialitate a NewPipe explică în detaliu ce date sunt trimise și stocate atunci când trimiteți un raport de blocare sau comentați pe blogul nostru. Puteți găsi documentul [aici](https://newpipe.net/legal/privacy/).
 
 ## Licenţă
-[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)  
+[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-NewPipe este Software Gratuit: Îl puteţi folosi şi împărtăşi cum doriţi. Mai exact, îl puteți redistribui și / sau modifica în conformitate cu termenii
+YmnTube este Software Gratuit: Îl puteţi folosi şi împărtăşi cum doriţi. Mai exact, îl puteți redistribui și / sau modifica în conformitate cu termenii
 [GNU General Public License](https://www.gnu.org/licenses/gpl.html) aşa cum a fost publicat de Free Software Foundation, fie versiunea 3 a Licenței, fie
 (la alegerea dvs.) orice versiune ulterioară.

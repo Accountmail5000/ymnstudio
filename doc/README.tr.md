@@ -1,5 +1,5 @@
-<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p> 
-<h2 align="center"><b>NewPipe</b></h2>
+<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p>
+<h2 align="center"><b>YmnTube</b></h2>
 <h4 align="center">Android için hafif ve özgür bir akış arayüzü.</h4>
 
 <p align="center"><a href="https://f-droid.org/packages/org.schabi.newpipe/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-tr.svg" alt="Get it on F-Droid" width=206/></a></p>
@@ -27,7 +27,7 @@
 > [!warning]
 > <b>BU SÜRÜM BETA SÜRÜMÜDÜR, BU NEDENLE HATALARLA KARŞILAŞABİLİRSİNİZ. HATA BULURSANIZ BU GITHUB DEPOSUNDA BUNU BİLDİRİN.</b>
 >
-> <b>GOOGLE PLAY STORE'A NEWPIPE VEYA BAŞKA BİR KOPYASINI KOYMAK, PLAY STORE ŞARTLARINI VE KOŞULLARINI İHLAL EDER.</b>
+> <b>GOOGLE PLAY STORE'A YMNTUBE VEYA BAŞKA BİR KOPYASINI KOYMAK, PLAY STORE ŞARTLARINI VE KOŞULLARINI İHLAL EDER.</b>
 
 ## Ekran görüntüleri
 
@@ -46,7 +46,7 @@
 
 ## Açıklama
 
-NewPipe herhangi bir Google çerçeve kütüphanesini, ya da YouTube API hizmetlerini kullanmaz. Gerekli web hizmetleri yalnızca gerekli bilgileri almak için kaynak olarak kullanılır, bu nedenle bu uygulama Google hizmetleri yüklü olmayan cihazlarda da kullanılabilir. Ayrıca, copyleft özgür yazılımı olan NewPipe'ı kullanmak için bir YouTube hesabına ihtiyacınız yoktur.
+YmnTube herhangi bir Google çerçeve kütüphanesini, ya da YouTube API hizmetlerini kullanmaz. Gerekli web hizmetleri yalnızca gerekli bilgileri almak için kaynak olarak kullanılır, bu nedenle bu uygulama Google hizmetleri yüklü olmayan cihazlarda da kullanılabilir. Ayrıca, copyleft özgür yazılımı olan YmnTube'ı kullanmak için bir YouTube hesabına ihtiyacınız yoktur.
 
 ### Özellikler
 
@@ -92,7 +92,7 @@ NewPipe birden fazla hizmeti destekler. Uygulamaya ve ayıklayıcıya yeni bir h
 <span id="updates"></span>
 
 ## Kurulum ve güncellemeler
-Aşağıdaki yöntemlerden birini kullanarak NewPipe'ı kurabilirsiniz:
+Aşağıdaki yöntemlerden birini kullanarak YmnTube'ı kurabilirsiniz:
  1. Özel depomuzu F-Droid'e ekleyin ve oradan yükleyin. Kılavuzu şurada bulabilirsiniz: https://newpipe.net/FAQ/tutorials/install-add-fdroid-repo/
  2. APK'yı [GitHub sürümlerinden](https://github.com/TeamNewPipe/NewPipe/releases) indirin ve kurun.
  3. F-Droid ile güncelleyin. Bu, güncellemeleri almanın en yavaş yöntemidir, çünkü F-Droid değişiklikleri tanımalı, APK'yı kendisi oluşturmalı, imzalamalı ve ardından güncellemeyi kullanıcılara dağıtmalıdır.
@@ -100,15 +100,15 @@ Aşağıdaki yöntemlerden birini kullanarak NewPipe'ı kurabilirsiniz:
 
 Çoğu kullanıcı için yöntem 1'i öneririz. Yöntem 1 veya 2 kullanılarak yüklenen APK'lar birbiriyle uyumludur, ancak yöntem 3 kullanılarak yüklenenlerle uyumlu değildir. Bu durum, 1 ve 2 için kullanılan aynı imzalama anahtarıın (bizim anahtarımız) 3 için kullanılan imzalama anahtarından (F-Droid'in anahtarı) farklı olmasından kaynaklanmaktadır. Yöntem 4 kullanılarak oluşturulan deneysel APK'larda anahtar yoktur. İmzalama anahtarları, bir kullanıcının bir uygulamaya kötü amaçlı bir güncelleme yüklemek için kandırılmadığından emin olmanıza yardımcı olur.
 
-Bu arada, herhangi bir nedenle kaynakları değiştirmek istiyorsanız (örneğin, NewPipe'ın temel bir işlevi bozuldu ve F-Droid tarafında henüz bir güncelleme yayınlanmadı), bu prosedürü izlemenizi öneririz:
-1. Verilerinizi yedekleyin. `NewPipe Ayarları > İçerik > Veritabanını dışa aktar` seçeneklerini izleyerek aboneliklerinizi, oynatma listelerinizi ve geçmişinizi yedekleyin.
-2. NewPipe'ı kaldırın
+Bu arada, herhangi bir nedenle kaynakları değiştirmek istiyorsanız (örneğin, YmnTube'ın temel bir işlevi bozuldu ve F-Droid tarafında henüz bir güncelleme yayınlanmadı), bu prosedürü izlemenizi öneririz:
+1. Verilerinizi yedekleyin. `YmnTube Ayarları > İçerik > Veritabanını dışa aktar` seçeneklerini izleyerek aboneliklerinizi, oynatma listelerinizi ve geçmişinizi yedekleyin.
+2. YmnTube'ı kaldırın
 3. APK dosyasını yeni bir kaynaktan indirin ve yükleyin
 4. `Ayarlar > İçerik > Veritabanını içe aktar` seçeneklerini izleyerek 1. adımdaki verileri içe aktarın
 
 ## Katkıda bulunma
 Fikirleriniz, çevirileriniz, tasarım değişiklikleriniz, kod temizlemeniz veya ağır kod değişiklikleriniz olsun, yardımınıza her zaman açığız.
-Yapılan her değişiklikle NewPipe daha da iyi bir konuma geliyor!
+Yapılan her değişiklikle YmnTube daha da iyi bir konuma geliyor!
 
 Eğer yer almak istiyorsanız, [katkı sağlayanlar için hazırladığımız notları](/.github/CONTRIBUTING.md) kontrol edin.
 
@@ -129,13 +129,13 @@ NewPipe'ı beğendiyseniz, yapacağınız bağışlar bizi motive eder. Bitcoin 
 
 ## Gizlilik politikası
 
-NewPipe projesi, çevrimiçi akış hizmetlerini kullanmak için özel, özgür ve anonim bir deneyim sunmayı amaçlamaktadır.
+YmnTube projesi, çevrimiçi akış hizmetlerini kullanmak için özel, özgür ve anonim bir deneyim sunmayı amaçlamaktadır.
 Bu doğrultuda, uygulama sizin izniniz olmadan herhangi bir veri toplamaz. NewPipe'ın Gizlilik Politikası, bir çökme raporu gönderdiğinizde veya blogumuzda yorum yaptığınızda hangi verilerin gönderildiğini ve saklandığını ayrıntılı olarak açıklar. İlgili belgeyi [burada](https://newpipe.net/legal/privacy/) bulabilirsiniz.
 
 ## Lisans
-[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)  
+[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-NewPipe özgür bir yazılımdır. Kendi başınıza kullanabilir, öğrenebilir, paylaşabilir
+YmnTube özgür bir yazılımdır. Kendi başınıza kullanabilir, öğrenebilir, paylaşabilir
 ve geliştirebilirsiniz. Free Software Foundation tarafından yayınlanan GNU Genel Kamu Lisansı,
 Lisansın 3. sürümü veya (isteğe bağlı olarak) daha sonraki bir sürümü şartları ve
 koşulları altında yeniden dağıtabilir ve/veya değiştirebilirsiniz.

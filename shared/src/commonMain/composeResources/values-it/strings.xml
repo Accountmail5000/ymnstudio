@@ -13,10 +13,10 @@
     <string name="donation_title">Dona</string>
     <string name="give_back">Restituisci il favore</string>
     <string name="website_title">Sito web</string>
-    <string name="website_encouragement">Visita il sito di NewPipe per maggiori info e notizie.</string>
-    <string name="privacy_policy_title">Politica di riservatezza di NewPipe</string>
+    <string name="website_encouragement">Visita il sito di YmnTube per maggiori info e notizie.</string>
+    <string name="privacy_policy_title">Politica di riservatezza di YmnTube</string>
     <string name="read_privacy_policy">Leggi la politica di riservatezza</string>
-    <string name="app_license_title">Licenza di NewPipe</string>
+    <string name="app_license_title">Licenza di YmnTube</string>
     <string name="read_full_license">Leggi la licenza</string>
     <string name="faq_title">Domande frequenti</string>
     <string name="faq_description">Se stai avendo problemi durante l'uso dell'app, dai un occhio alle risposte a queste domande comuni!</string>
@@ -24,9 +24,9 @@
     <string name="open_in_browser">Apri nel browser</string>
     <string name="done">Fatto</string>
     <string name="not_available">Non disponibile</string>
-    <string name="donation_encouragement">NewPipe è sviluppato da volontari che impiegano il loro tempo libero per offrirti un'esperienza d'uso migliore. Restituisci il favore, aiutandoli a rendere NewPipe ancora più piacevole mentre si gustano una tazza di caffè.</string>
-    <string name="privacy_policy_encouragement">Il progetto NewPipe tiene molto alla tua privacy. Perciò, l'app non raccoglie alcun dato senza il tuo consenso. \nL'informativa sulla privacy spiega nel dettaglio quali dati vengono trattati e memorizzati durante l'invio di segnalazioni per arresti anomali.</string>
-    <string name="app_license">NewPipe è software libre copyleft: puoi utilizzare, studiare, condividere e migliorare a volontà il suo codice sorgente. Nello specifico è possibile ridistribuirlo e/o modificarlo in base ai termini della GNU General Public License come pubblicato dalla Free Software Foundation, sia la versione 3 della licenza sia (a vostra scelta) qualsiasi versione successiva.</string>
+    <string name="donation_encouragement">YmnTube è sviluppato da volontari che impiegano il loro tempo libero per offrirti un'esperienza d'uso migliore. Restituisci il favore, aiutandoli a rendere YmnTube ancora più piacevole mentre si gustano una tazza di caffè.</string>
+    <string name="privacy_policy_encouragement">Il progetto YmnTube tiene molto alla tua privacy. Perciò, l'app non raccoglie alcun dato senza il tuo consenso. \nL'informativa sulla privacy spiega nel dettaglio quali dati vengono trattati e memorizzati durante l'invio di segnalazioni per arresti anomali.</string>
+    <string name="app_license">YmnTube è software libre copyleft: puoi utilizzare, studiare, condividere e migliorare a volontà il suo codice sorgente. Nello specifico è possibile ridistribuirlo e/o modificarlo in base ai termini della GNU General Public License come pubblicato dalla Free Software Foundation, sia la versione 3 della licenza sia (a vostra scelta) qualsiasi versione successiva.</string>
     <string name="settings">Impostazioni</string>
     <string name="search">Cerca</string>
     <string name="content">Contenuto</string>

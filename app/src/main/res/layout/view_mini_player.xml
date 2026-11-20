@@ -32,7 +32,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <org.schabi.newpipe.views.NewPipeTextView
+        <org.schabi.newpipe.views.YmnTubeTextView
             android:id="@+id/mini_player_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:textStyle="bold"
             tools:text="Video title" />
 
-        <org.schabi.newpipe.views.NewPipeTextView
+        <org.schabi.newpipe.views.YmnTubeTextView
             android:id="@+id/mini_player_creator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

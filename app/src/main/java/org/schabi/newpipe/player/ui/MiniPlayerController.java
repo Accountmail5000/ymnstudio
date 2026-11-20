@@ -347,6 +347,7 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
     }
 
     private void closePlayback() {
+        MiniPlayerDismissal.dismiss();
         if (controller != null) {
             controller.getTransportControls().stop();
         }

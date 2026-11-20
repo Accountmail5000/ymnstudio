@@ -1,5 +1,5 @@
-<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p> 
-<h2 align="center"><b>NewPipe</b></h2>
+<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p>
+<h2 align="center"><b>YmnTube</b></h2>
 <h4 align="center">輕巧的 Android 串流前端</h4>
 
 <p align="center"><a href="https://f-droid.org/packages/org.schabi.newpipe/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-zh-tw.svg" alt="Get it on F-Droid" width=206/></a></p>
@@ -27,7 +27,7 @@
 > [!warning]
 > <b>這是測試版本，可能會發生錯誤。如果遇到錯誤，請在我們的 GITHUB REPO 開 ISSUE 回報。</b>
 >
-> <b>將 NEWPIPE 或其任何分支上傳至 GOOGLE PLAY 商店違反了他們的使用者合約。</b>
+> <b>將 YMNTUBE 或其任何分支上傳至 GOOGLE PLAY 商店違反了他們的使用者合約。</b>
 
 <span id="screenshots"></span>
 ## 截圖
@@ -48,7 +48,7 @@
 <span id="description"></span>
 ## 說明
 
-NewPipe 不使用任何 Google 架構的函式庫或 Youtube API。因為只解析網站來取得必要資訊，此軟體可以在沒有安裝 Google 服務的裝置上使用。此外，使用 NewPipe 不需要 YouTube 帳號。NewPipe 是個 copyleft 自由軟體。
+YmnTube 不使用任何 Google 架構的函式庫或 Youtube API。因為只解析網站來取得必要資訊，此軟體可以在沒有安裝 Google 服務的裝置上使用。此外，使用 YmnTube 不需要 YouTube 帳號。YmnTube 是個 copyleft 自由軟體。
 
 <span id="features"></span>
 ### 功能
@@ -69,8 +69,8 @@ NewPipe 不使用任何 Google 架構的函式庫或 Youtube API。因為只解�
 * 顯示頻道資訊
 * 搜索頻道
 * 觀看頻道影片
-* 支援 Orbot/Tor （目前未直接實裝） 
-* 支援 1080p/2K/4K 
+* 支援 Orbot/Tor （目前未直接實裝）
+* 支援 1080p/2K/4K
 * 觀看歷史
 * 訂閱頻道
 * 搜尋歷史
@@ -97,7 +97,7 @@ NewPipe 支援多種服務。我們的[使用文件](https://teamnewpipe.github.
 
 <span id="installation-and-updates"></span>
 ## 安裝與更新
-你可以用以下的任何方法安裝 NewPipe：
+你可以用以下的任何方法安裝 YmnTube：
 1. 將我們的 repo 加至 F-Droid 再從那邊安裝。詳細的說明在此：https://newpipe.net/FAQ/tutorials/install-add-fdroid-repo/
 2. 從 [Github 發布](https://github.com/TeamNewPipe/NewPipe/releases) 下載 APK 再安裝。
 3. 自 F-Droid 更新。這是取得更新最慢的方式，因為 F-Droid 要檢測到更新、建置 APK 、簽署後才會將更新推送給使用者。
@@ -105,9 +105,9 @@ NewPipe 支援多種服務。我們的[使用文件](https://teamnewpipe.github.
 
 對一般的使用者我們推薦方法一。使用方法一或二安裝的 APK 互相相容，但都不相容於方法三。因為前兩者的簽章使用相同的（我們的）金鑰，與後者（使用 F-Droid 的金鑰）的不同。使用方法四建置除錯 APK 完全避免了金鑰的問題。簽章金鑰能幫助使用者避免安裝惡意的更新。
 
-若你想更換安裝來源（如果 NewPipe 的核心機能壞掉而 F-Droid 又還沒有最新的更新），我們推薦以下的步驟：
+若你想更換安裝來源（如果 YmnTube 的核心機能壞掉而 F-Droid 又還沒有最新的更新），我們推薦以下的步驟：
 1. 在 設定 > 內容 > 匯出資料庫 備份資料以保留歷史、訂閱與播放清單
-2. 移除 NewPipe
+2. 移除 YmnTube
 3. 從新的來源下載 APK 並安裝
 4. 在 設定 > 內容 > 匯入資料庫 匯入在步驟 1 備份的資料
 
@@ -134,12 +134,12 @@ NewPipe 支援多種服務。我們的[使用文件](https://teamnewpipe.github.
 </table>
 
 ## 隱私權政策
-NewPipe 專案旨在提供私人與匿名的網路媒體使用體驗。
+YmnTube 專案旨在提供私人與匿名的網路媒體使用體驗。
 因此，此軟體不在沒有你的同意下收集任何資料。NewPipe 的隱私權政策說明了送出錯誤報告與在我們的部落格上留言時何種資料會被傳輸或儲存。你可以在[這裡](https://newpipe.net/legal/privacy/)找到此文件。
 
 <span id="license"></span>
 ## 授權條款
-[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)  
+[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-NewPipe 是自由軟體：可以任意使用、研究、分享或更改。在自由軟體基金會發布的[ GPL 通用公眾授權條款]（第三或更新的版本）下可以重新散佈與/或修改。
+YmnTube 是自由軟體：可以任意使用、研究、分享或更改。在自由軟體基金會發布的[ GPL 通用公眾授權條款]（第三或更新的版本）下可以重新散佈與/或修改。
 

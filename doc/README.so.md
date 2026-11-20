@@ -1,5 +1,5 @@
-<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p> 
-<h2 align="center"><b>NewPipe</b></h2>
+<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p>
+<h2 align="center"><b>YmnTube</b></h2>
 <h4 align="center">App bilaash ah oo fudud looguna talagalay in Android-ka wax loogu daawado.</h4>
 
 <p align="center"><a href="https://f-droid.org/packages/org.schabi.newpipe/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-so.svg" alt="Get it on F-Droid" width=206/></a></p>
@@ -27,7 +27,7 @@
 > [!warning]
 > <b>MIDKAN, NOOCA APP-KA EE HADDA WALI TIJAABO AYUU KU JIRAA, SIDAA DARTEED CILLADO AYAAD LA KULMI KARTAA. HADAAD LA KULANTO, KA FUR ARIN SHARAXAYA QAYBTANADA ARRIMAHA EE GITHUB-KA.</b>
 >
-> <b>NEWPIPE AMA KUWA KU SALAYSAN IN PLAYSTORE-KA LA GALIYO WAXAY KA HOR IMANAYSAA SHARCIGA IYO SHURUUDAHA AY LEEYIHIIN.</b>
+> <b>YMNTUBE AMA KUWA KU SALAYSAN IN PLAYSTORE-KA LA GALIYO WAXAY KA HOR IMANAYSAA SHARCIGA IYO SHURUUDAHA AY LEEYIHIIN.</b>
 
 ## Sawir-shaashadeed
 
@@ -46,7 +46,7 @@
 
 ## Faahfaahin
 
-NewPipe ma isticmalo nidaamka wada shaqaynta Google, ama API-ga YouTube. Kaliya website-yada ayaa la furaa si xogta loo baahanyahay loogala soo dhex baxo, App-kan waxaa lagu isticmaali karaa aaladaha aysa ku jirin Adeegyada Google. Sidoo kale, uma baahnid akoon YouTube ah si aad u isticmaasho NewPipe, kaasoo ah barnaamij bilaash ah.
+YmnTube ma isticmalo nidaamka wada shaqaynta Google, ama API-ga YouTube. Kaliya website-yada ayaa la furaa si xogta loo baahanyahay loogala soo dhex baxo, App-kan waxaa lagu isticmaali karaa aaladaha aysa ku jirin Adeegyada Google. Sidoo kale, uma baahnid akoon YouTube ah si aad u isticmaasho YmnTube, kaasoo ah barnaamij bilaash ah.
 
 ### Waxqabadka
 
@@ -66,7 +66,7 @@ NewPipe ma isticmalo nidaamka wada shaqaynta Google, ama API-ga YouTube. Kaliya 
 * Raadi kanaalo
 * Daawo muuqaalada kanaal
 * Taageerida Orbot/Tor (wali toos ma aha)
-* Taageerida muuqaalada 1080p/2K/4K 
+* Taageerida muuqaalada 1080p/2K/4K
 * Kaydka wixii hore [aad u daawatay]
 * Inaad rukumato kanaalada
 * Kaydinta waxaad raadisay
@@ -89,7 +89,7 @@ NewPipe wuxuu taageeraa adeegyo badan. [warqadan](https://teamnewpipe.github.io/
 * Bandcamp \[tijaabo\]
 
 ## Kushubida iyo cusboonaysiinta
-Marka koodhka NewPipe isbadal ku dhaco (wax cusub oo lagusoo kordhiyay ama cilad bixin), ugu dambayn waxaa lasii daayaa mid cusub (Siidayn). Siidaynta qaabkeedu waa x.xx.x . Si aad midka cusub u hesho, waxaad samayn kartaa:
+Marka koodhka YmnTube isbadal ku dhaco (wax cusub oo lagusoo kordhiyay ama cilad bixin), ugu dambayn waxaa lasii daayaa mid cusub (Siidayn). Siidaynta qaabkeedu waa x.xx.x . Si aad midka cusub u hesho, waxaad samayn kartaa:
  1. Inaad mid cusub (APK) adigu dhisato. Tani waa mida ugu dagdag badan eed waxyaabaha cusub ku heli karto, laakiin way adagtahay, sidaa darteed waxaan soojeedinaynaa inaad isticmaasho qababka kale.
  2. Ku dar qayb gaar ah xaganaga F-Droid oo xagaas kaga shub isla markay siidayn soobaxdo. Hagitaanka xagan ka eeg: https://newpipe.net/FAQ/tutorials/install-add-fdroid-repo/
  3. Kasoo dajiso APK-ga xaga [Siidaynta GitHub](https://github.com/TeamNewPipe/NewPipe/releases) oo ku shubo isla markay siidayn soobaxdo.
@@ -97,9 +97,9 @@ Marka koodhka NewPipe isbadal ku dhaco (wax cusub oo lagusoo kordhiyay ama cilad
 
 Waxaan usoojeedinaynaa isticmaaalka qaabka 2 dadka badankood. APK-yada loogu shubo qaabka 2 ama 3 way isqaadan karaan, laakiin isma qaadan karaan kuwa loogu shubay qaabka 4. Sababtuna waxaa weeye furaha sixiixa oo iskumid ah (kaanaga weeye) oo loo isticmaalay 2 iyo 3, laakiin furo sixiixeed ka duwan (midka F-Droid) oo loo isticmaalay 4. Dhisida APK ayadoo la isticmaalayo qaabka 1 waxay gabi ahaanba ka reebtaa wax fure ah. Furayaasha sixiixa waxay xaqiijiyaan in isticmaalaha aan lagu khaldin inuu ku shubto cusboonaysiin khalad ah (wax lasoo dhexraaciyay) app-ka.
 
-Waxaa kale, hadaad rabto inaad tixraacayada kala badasho sabab jirta awgeed (tusaale shaqaynta aasaasiga ah ee NewPipe ayaa khalkhashay F-Droid-na wali cusboonysiin ma hayo), waxaan soojeedinaynaa isticmaalka qaabkan:
+Waxaa kale, hadaad rabto inaad tixraacayada kala badasho sabab jirta awgeed (tusaale shaqaynta aasaasiga ah ee YmnTube ayaa khalkhashay F-Droid-na wali cusboonysiin ma hayo), waxaan soojeedinaynaa isticmaalka qaabkan:
 1. Xogtaada koobi ka samee adoo raacaya Fadhiga > Luuqada & Fadhiga Kale > Gudbi Xog Diyaaran si aysa kaaga bixin kaydka wixii hore, rukunka, iyo xulalka
-2. Saar NewPipe
+2. Saar YmnTube
 3. Kasoo daji APK-ga tixraaca cusub oo ku shub
 4. Kasoo gali xogta talaabada 1 xaga Fadhiga > Luuqada & Fadhiga Kale >  Soo Gali Xog Kaydsan
 
@@ -125,10 +125,10 @@ Hadaad jeceshahay NewPipe waan ku faraxsanaan lahayn deeq. Waxaad soo diri karta
 
 ## Siyaasada Sirdhawrka
 
-Mashruuca NewPipe waxay ujeedadiisu tahay inuu bixiyo wax kuu gaar ah, oo adoon shaqsi ahaan laguu aqoonsan aad isticmaasho website-yada wax laga daawado/dhagaysto.
+Mashruuca YmnTube waxay ujeedadiisu tahay inuu bixiyo wax kuu gaar ah, oo adoon shaqsi ahaan laguu aqoonsan aad isticmaasho website-yada wax laga daawado/dhagaysto.
 Sidaa darteed, app-ku wax xog ah ma uruuriyo fasaxaaga la'aantii. Siyaasada Sirdhawrka NewPipe ayaa si faahfaahsan u sharaxda waxii xog ah ee la diro markaad cillad wariso, ama aad bogganaga faallo ka dhiibato. Warqada waxaad ka heli kartaa [halkan](https://newpipe.net/legal/privacy/).
 
 ## Laysinka
-[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)  
+[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-NewPipe waa barnaamij bilaash ah oon lahayn xuquuqda daabacaada: Waad isticmaali kartaa, waad wadaagi kartaa waadna hormarin kartaa hadaad rabto. Gaar ahaan waad sii daabici kartaa ama wax baad ka badali kartaa ayadoo la raacayo shuruudaha sharciga guud ee [GNU](https://www.gnu.org/licenses/gpl.html) sida ay soosaareen Ururka Barnaamijyada Bilaashka ah, soosaarista 3aad ee laysinka, ama (hadaad doonto) nooc walba oo kasii dambeeyay laysinkii 3aad. 
+NewPipe waa barnaamij bilaash ah oon lahayn xuquuqda daabacaada: Waad isticmaali kartaa, waad wadaagi kartaa waadna hormarin kartaa hadaad rabto. Gaar ahaan waad sii daabici kartaa ama wax baad ka badali kartaa ayadoo la raacayo shuruudaha sharciga guud ee [GNU](https://www.gnu.org/licenses/gpl.html) sida ay soosaareen Ururka Barnaamijyada Bilaashka ah, soosaarista 3aad ee laysinka, ama (hadaad doonto) nooc walba oo kasii dambeeyay laysinkii 3aad.

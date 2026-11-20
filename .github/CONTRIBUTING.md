@@ -1,6 +1,6 @@
 ### Please do **not** open pull requests for *new features* now, as we are planning to rewrite large chunks of the code. Only bugfix PRs will be accepted. More details will be announced soon!
 
-NewPipe contribution guidelines
+YmnTube contribution guidelines
 ===============================
 
 ## AI policy
@@ -18,7 +18,7 @@ NewPipe contribution guidelines
 
 ## Crash reporting
 
-Report crashes through the **automated crash report system** of NewPipe.
+Report crashes through the **automated crash report system** of YmnTube.
 This way all the data needed for debugging is included in your bug report for GitHub.
 You'll see *exactly* what is sent, be able to add **your comments**, and then send it.
 
@@ -80,7 +80,7 @@ You may find [SonarLint](https://www.sonarlint.org/intellij)'s **inspections** u
 The [checkStyle](https://github.com/checkstyle/checkstyle) plugin verifies that Java code abides by the project style. It runs automatically each time you build the project. If you want to view errors directly in the editor, instead of having to skim through the build output, you can install an Android Studio plugin:
 - Go to `File -> Settings -> Plugins`, search for `checkstyle` and install `CheckStyle-IDEA`.
 - Go to `File -> Settings -> Tools -> Checkstyle`.
-- Add NewPipe's configuration file by clicking the `+` in the right toolbar of the "Configuration File" list.
+- Add YmnTube's configuration file by clicking the `+` in the right toolbar of the "Configuration File" list.
 - Under the "Use a local Checkstyle file" bullet, click on `Browse` and, enter `checkstyle` folder under the project's root path and pick the file named `checkstyle.xml`.
 - Enable "Store relative to project location" so that moving the directory around does not create issues.
 - Insert a description in the top bar, then click `Next` and then `Finish`.

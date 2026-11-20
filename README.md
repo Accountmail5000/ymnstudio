@@ -1,6 +1,6 @@
 # YmnTube Android
 
-This repository contains the YmnTube app source and build configuration. The app is based on NewPipe and is licensed under GPL-3.0-or-later; see [LICENSE](LICENSE).
+This repository contains the YmnTube app source and build configuration. The app is based on YmnTube and is licensed under GPL-3.0-or-later; see [LICENSE](LICENSE).
 
 ## Build an APK locally
 

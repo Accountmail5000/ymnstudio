@@ -17,14 +17,18 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.player.helper.ExclusivePlaybackCoordinator;
+import org.schabi.newpipe.player.helper.PlayerHolder;
 import org.schabi.newpipe.util.ServiceHelper;
 import org.schabi.newpipe.util.ThemeHelper;
 
@@ -59,12 +63,14 @@ public class DownloadPlayerActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (mediaUri != null) {
+            PlayerHolder.getInstance().stopService();
             initializePlayer();
         }
     }
 
     @Override
     protected void onStop() {
+        ExclusivePlaybackCoordinator.release(this);
         releasePlayer();
         super.onStop();
     }
@@ -91,7 +97,14 @@ public class DownloadPlayerActivity extends AppCompatActivity {
         }
 
         try {
+            ExclusivePlaybackCoordinator.claim(this, this::releasePlayer);
             player = new ExoPlayer.Builder(this).build();
+            player.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setUsage(C.USAGE_MEDIA)
+                            .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                            .build(),
+                    true);
             playerView.setPlayer(player);
             player.addListener(new Player.Listener() {
                 @Override

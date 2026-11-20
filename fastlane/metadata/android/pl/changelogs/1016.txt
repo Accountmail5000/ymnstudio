@@ -6,4 +6,4 @@ Różne poprawki odtwarzacza, w tym tłumienie dźwięku, czarne ekrany i otwier
 [YouTube] Drobne poprawki i porządki
 Wiele wewnętrznych ulepszeń i poprawek błędów
 
-Dziękujemy tegorocznym studentom ANU, którzy pomogli w rozwoju NewPipe!
+Dziękujemy tegorocznym studentom ANU, którzy pomogli w rozwoju YmnTube!

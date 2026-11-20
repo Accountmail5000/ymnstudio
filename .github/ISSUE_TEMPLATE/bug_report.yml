@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for helping to make NewPipe better by reporting a bug. :hugs:
+        Thank you for helping to make YmnTube better by reporting a bug. :hugs:
 
         Please fill in as much information as possible about your bug so that we don't have to play "information ping-pong" and can help you immediately.
 
@@ -33,7 +33,7 @@ body:
     id: app-version
     attributes:
      label: Affected version
-     description: "In which NewPipe version did you encounter the bug?"
+     description: "In which YmnTube version did you encounter the bug?"
      placeholder: "x.xx.x - Can be seen in the app from the 'About' section in the sidebar"
     validations:
       required: true
@@ -109,7 +109,7 @@ body:
     attributes:
       label: Additional information
       description: |
-        Any other information you'd like to include, for instance that 
+        Any other information you'd like to include, for instance that
         * the affected device is foldable or a TV
         * you have disabled all animations on your device
         * your cat disabled your network connection

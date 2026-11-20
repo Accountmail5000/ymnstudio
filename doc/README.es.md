@@ -1,5 +1,5 @@
 <p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p>
-<h2 align="center"><b>NewPipe</b></h2>
+<h2 align="center"><b>YmnTube</b></h2>
 <h4 align="center">Una interfaz de streaming ligera y libre para Android.</h4>
 
 <p align="center"><a href="https://f-droid.org/packages/org.schabi.newpipe/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-es.svg" alt="Get it on F-Droid" width=206/></a></p>
@@ -28,7 +28,7 @@
 > [!warning]
 > <b>ESTA ES UNA VERSIÓN BETA, POR LO TANTO, PUEDES ENCONTRAR BUGS. SI ENCUENTRAS UNO ABRA UN ISSUE A TRAVÉS DE NUESTRO REPOSITORIO DE GITHUB.</b>
 >
-> <b>COLOCAR NEWPIPE O CUALQUIER FORK DE NEWPIPE EN LA GOOGLE PLAY STORE VIOLARÁ SUS TÉRMINOS Y CONDICIONES.</b>
+> <b>COLOCAR YMNTUBE O CUALQUIER FORK DE YMNTUBE EN LA GOOGLE PLAY STORE VIOLARÁ SUS TÉRMINOS Y CONDICIONES.</b>
 
 ## Capturas de Pantalla
 
@@ -47,7 +47,7 @@
 
 ## Descripción
 
-NewPipe no usa ninguna librería del framework de Google, ni la API de YouTube. Los sitios web solamente se analizan para extraer la información requerida, por lo que esta app se puede usar sin los servicios de Google instalados. Además, no se necesita una cuenta de YouTube para usar NewPipe, que es un programa libre <i lang="en">copyleft</i>.
+YmnTube no usa ninguna librería del framework de Google, ni la API de YouTube. Los sitios web solamente se analizan para extraer la información requerida, por lo que esta app se puede usar sin los servicios de Google instalados. Además, no se necesita una cuenta de YouTube para usar YmnTube, que es un programa libre <i lang="en">copyleft</i>.
 
 ### Características
 
@@ -92,7 +92,7 @@ NewPipe soporta varios servicios. Nuestras [documentaciones](https://teamnewpipe
 
 ## Instalación y Actualizaciones
 
-Se puede instalar NewPipe usando uno de los métodos siguientes:
+Se puede instalar YmnTube usando uno de los métodos siguientes:
 
  1. Agregando nuestro repositorio personalizado a F-Droid e instalarlo desde allí. Las instrucciones están [aquí](https://newpipe.net/FAQ/tutorials/install-add-fdroid-repo/).
  2. Descargando el archivo APK de [aquí](https://github.com/TeamNewPipe/NewPipe/releases) y posteriormente instalarlo.
@@ -101,15 +101,15 @@ Se puede instalar NewPipe usando uno de los métodos siguientes:
 
 Recomendamos el método 1 para la mayoría de usuarios. Los APKs instalados usando método 1 y 2 son compatibles entre sí, pero no lo son con los instalados usando el método 3. Esto es debido a la clave de firmado, ya que los métodos 1 y 2 usan la misma clave (la nuestra), pero el método 3 usa una clave diferente (la de F-Droid). El método 4 excluye totalmente una clave de firmado. Las claves de firmado aseguran que el usuario no esté siendo engañado para instalar/actualizar una APK maliciosa.
 
-Además, si quiere cambiar el método de instalación por alguna razón (por ejemplo: la funcionalidad del núcleo de NewPipe se rompe o F-Droid aún no publica la actualización), recomendamos el siguiente procedimiento:
+Además, si quiere cambiar el método de instalación por alguna razón (por ejemplo: la funcionalidad del núcleo de YmnTube se rompe o F-Droid aún no publica la actualización), recomendamos el siguiente procedimiento:
 1. Respalde su información a través de Ajustes > Contenido > Exportar base de datos; esto guardará su historial (videos vistos y búsquedas), suscripciones, listas de reproducción y ajustes.
-2. Desinstale NewPipe.
+2. Desinstale YmnTube.
 3. Descargue el APK con un método distinto e instálelo.
 4. Importe la información (la base de datos extraída del paso 1) a través de Ajustes > Contenido > Importar base de datos. Tenga en cuenta que esta opción superpondrá su historial actual (tanto de vídeos como de búsquedas), sus listas de reproducción y (opcionalmente) sus configuraciones.
 
 ## Contribución
 
-Si tiene ideas, traducciones, cambios de diseño, limpieza de código o cambios grandes de código, su ayuda es siempre bienvenida. ¡Cuanto más hagamos, NewPipe será mucho mejor!
+Si tiene ideas, traducciones, cambios de diseño, limpieza de código o cambios grandes de código, su ayuda es siempre bienvenida. ¡Cuanto más hagamos, YmnTube será mucho mejor!
 
 Si quiere involucrarse, fíjese en nuestras [notas de contribución](/.github/CONTRIBUTING.md).
 

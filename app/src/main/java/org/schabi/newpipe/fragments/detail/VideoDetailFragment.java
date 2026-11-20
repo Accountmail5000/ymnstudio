@@ -103,6 +103,7 @@ import org.schabi.newpipe.player.playqueue.PlayQueue;
 import org.schabi.newpipe.player.playqueue.PlayQueueItem;
 import org.schabi.newpipe.player.playqueue.SinglePlayQueue;
 import org.schabi.newpipe.player.ui.MainPlayerUi;
+import org.schabi.newpipe.player.ui.MiniPlayerDismissal;
 import org.schabi.newpipe.player.ui.VideoPlayerUi;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.DeviceUtils;
@@ -588,8 +589,10 @@ public final class VideoDetailFragment
         binding.overlayThumbnail.setOnClickListener(overlayListener);
         binding.overlayMetadataLayout.setOnClickListener(overlayListener);
         binding.overlayButtonsLayout.setOnClickListener(overlayListener);
-        binding.overlayCloseButton.setOnClickListener(v -> bottomSheetBehavior
-                .setState(BottomSheetBehavior.STATE_HIDDEN));
+        binding.overlayCloseButton.setOnClickListener(v -> {
+            MiniPlayerDismissal.dismiss();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        });
         binding.overlayPlayQueueButton.setOnClickListener(v -> openPlayQueue(requireContext()));
         binding.overlayPlayPauseButton.setOnClickListener(v -> {
             if (playerIsNotStopped()) {
@@ -1511,9 +1514,11 @@ public final class VideoDetailFragment
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                         break;
                     case ACTION_HIDE_MAIN_PLAYER:
+                        MiniPlayerDismissal.dismiss();
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                         break;
                     case ACTION_PLAYER_STARTED:
+                        MiniPlayerDismissal.restoreForNewPlayback();
                         if (shouldCollapseMiniPlayer(playerHolder.getType(),
                                 bottomSheetBehavior.getState())) {
                             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);

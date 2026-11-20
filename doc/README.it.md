@@ -1,5 +1,5 @@
-<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p> 
-<h2 align="center"><b>NewPipe</b></h2>
+<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p>
+<h2 align="center"><b>YmnTube</b></h2>
 <h4 align="center">Un <i>frontend</i> di streaming libero e leggero per Android.</h4>
 
 <p align="center"><a href="https://f-droid.org/packages/org.schabi.newpipe/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg" alt="Scaricalo su F-Droid" width=206/></a></p>
@@ -27,7 +27,7 @@
 > [!warning]
 > <b>QUEST'APP È IN BETA, QUINDI POTRESTI IMBATTERTI IN <i>BUG</i>. SE COSÌ FOSSE, APRI UN'<i>ISSUE</i> SUL NOSTRO REPOSITORIO GITHUB COMPILANDO IL <i>TEMPLATE ISSUE</i>.</b>
 >
-> <b>METTERE NEWPIPE, O QUALSIASI SUA <i>FORK</i>, NEL GOOGLE PLAY STORE, VIOLA I LORO TERMINI E CONDIZIONI.</b>
+> <b>METTERE YMNTUBE, O QUALSIASI SUA <i>FORK</i>, NEL GOOGLE PLAY STORE, VIOLA I LORO TERMINI E CONDIZIONI.</b>
 
 ## Screenshot
 
@@ -46,7 +46,7 @@
 
 ### Servizi Supportati
 
-NewPipe supporta, al momento, questi servizi:
+YmnTube supporta, al momento, questi servizi:
 
 <!-- Mettiamo un link separato ai siti dei servizi per evitare gente che apre un sito senza volere -->
 * YouTube ([sito](https://www.youtube.com/)) e YouTube Music ([sito](https://music.youtube.com/)) ([wiki](https://en.wikipedia.org/wiki/YouTube))
@@ -55,7 +55,7 @@ NewPipe supporta, al momento, questi servizi:
 * SoundCloud ([sito](https://soundcloud.com/)) ([wiki](https://en.wikipedia.org/wiki/SoundCloud))
 * media.ccc.de ([sito](https://media.ccc.de/)) ([wiki](https://en.wikipedia.org/wiki/Chaos_Computer_Club))
 
-Come puoi vedere, NewPipe supporta molteplici servizi audio e video. Sebbene tutto sia iniziato con YouTube, altre persone hanno aggiunto più siti col passare degli anni, rendendo NewPipe sempre più versatile!
+Come puoi vedere, YmnTube supporta molteplici servizi audio e video. Sebbene tutto sia iniziato con YouTube, altre persone hanno aggiunto più siti col passare degli anni, rendendo YmnTube sempre più versatile!
 
 Parzialmente per via delle circostanze, e parzialmente per via della sua popolarità, YouTube è il meglio supportato di questi servizi. Se usi o hai familiarità con qualcuno di questi altri servizi, per favore, aiutaci a migliorare il loro supporto! Stiamo cercando addetti a SoundCloud e PeerTube.
 
@@ -63,9 +63,9 @@ Se vuoi aggiungere un nuovo servizio, per favore, contattaci prima! La nostra [d
 
 ## Descrizione
 
-NewPipe svolge le sue funzioni prendendo i dati richiesti dall'API (ad es. PeerTube) del servizio che stai usando. Se l'API ufficiale ha delle restrinzioni (ad es. YouTube) per i nostri scopi, o è proprietaria, invece, l'app analizza il sito o usa un'API interna. Questo significa che non hai bisogno di un account su nessun servizio per usare NewPipe.
+YmnTube svolge le sue funzioni prendendo i dati richiesti dall'API (ad es. PeerTube) del servizio che stai usando. Se l'API ufficiale ha delle restrinzioni (ad es. YouTube) per i nostri scopi, o è proprietaria, invece, l'app analizza il sito o usa un'API interna. Questo significa che non hai bisogno di un account su nessun servizio per usare YmnTube.
 
-Inoltre, siccome sono programmi liberi e *open-source*, nè l'app nè l'estrattore usano alcuna libreria o *framework* proprietario, come i Google Play Services. Questo vuol dire che puoi usare NewPipe su dispositivi o *ROM custom* che non hanno le app Google installate.
+Inoltre, siccome sono programmi liberi e *open-source*, nè l'app nè l'estrattore usano alcuna libreria o *framework* proprietario, come i Google Play Services. Questo vuol dire che puoi usare YmnTube su dispositivi o *ROM custom* che non hanno le app Google installate.
 
 ### Funzionalità
 
@@ -94,18 +94,18 @@ Inoltre, siccome sono programmi liberi e *open-source*, nè l'app nè l'estratto
 
 ## Installazione e aggiornamenti
 
-Puoi installare NewPipe usando uno dei seguenti metodi:
+Puoi installare YmnTube usando uno dei seguenti metodi:
 1. Aggiungi il nostro repo a F-Droid e installalo da lì. Le istruzioni sono qui: https://newpipe.net/FAQ/tutorials/install-add-fdroid-repo/
 2. Scarica l'APK da [GitHub Releases](https://github.com/TeamNewPipe/NewPipe/releases) e installalo.
 3. Aggiorna tramite F-Droid. Questo è il metodo più lento di ricevere aggiornamenti, perché F-Droid deve riconoscere i cambiamenti, assemblare l'APK da solo, firmarlo, e poi distribuire l'aggiornamento agli utenti.
 4. Assemblare un APK di *debug* da solo/a. Questo è il metodo più veloce di ottenere nuove funzioni sul tuo dispositivo, ma è molto più complicato, quindi consigliamo usare uno degli altri metodi.
 5. Se sei interessato in una specifica funzione o un *bugfix* provveduto in una *Pull Request* in questo repo, puoi anche scaricare il suo APK da dentro la *PR*- Leggi la descrizione della *PR* per le istruzioni. La cosa bella degli APK specifici delle *PR* è che sono installati affianco all'app ufficiale, quindi non devi preoccuparti di perdere dati o fare qualche pasticcio.
 
-Consigliamo il metodo 1 per la maggior parte degli utenti. Gli APK installati usando il metodo 1 o 2 sono compatibili gli uni con gli altri (quindi, se hai installato NewPipe usando o il metodo 1 o il metodo 2, puoi anche aggiornare NewPipe usando l'altro), ma non con quelli installati usando il metodo 3. Questo è per via del fatto che la stessa *signing key* (la nostra) è usata sia per il 1° che per il 2°, ma un'altra *signing key* (quella di F-Droid) è usata per il 3°. Assemblare un APK di debug usando il metodo 4 esclude una chiave interamente. Le *signing key* aiutano ad assicurarsi che l'utente non sia spinto a installare un aggiornamento malevolo ad un'app. Quando si usa il metodo 5, ogni APK è firmato con una diversa chiave random fornita da GitHub Actions, quindi non puoi neanche aggiornarlo. Dovrai fare il *backup* e recuperare i dati dell'app ogni volta che desideri usare un nuovo APK.
+Consigliamo il metodo 1 per la maggior parte degli utenti. Gli APK installati usando il metodo 1 o 2 sono compatibili gli uni con gli altri (quindi, se hai installato YmnTube usando o il metodo 1 o il metodo 2, puoi anche aggiornare YmnTube usando l'altro), ma non con quelli installati usando il metodo 3. Questo è per via del fatto che la stessa *signing key* (la nostra) è usata sia per il 1° che per il 2°, ma un'altra *signing key* (quella di F-Droid) è usata per il 3°. Assemblare un APK di debug usando il metodo 4 esclude una chiave interamente. Le *signing key* aiutano ad assicurarsi che l'utente non sia spinto a installare un aggiornamento malevolo ad un'app. Quando si usa il metodo 5, ogni APK è firmato con una diversa chiave random fornita da GitHub Actions, quindi non puoi neanche aggiornarlo. Dovrai fare il *backup* e recuperare i dati dell'app ogni volta che desideri usare un nuovo APK.
 
-Nel frattempo, se vuoi cambiare fonte per la stessa ragione (ad es. la funzionalità essenziale di NewPipe si rompe e F-Droid non ha ancora l'ultimo aggiornamento), consigliamo di seguire questa procedura:
+Nel frattempo, se vuoi cambiare fonte per la stessa ragione (ad es. la funzionalità essenziale di YmnTube si rompe e F-Droid non ha ancora l'ultimo aggiornamento), consigliamo di seguire questa procedura:
 1. Fai il *backup* dei tuoi dati tramite Impostazioni > Contenuti > Esporta Database così puoi mantenere la tua cronologia, le tue iscrizioni, e le tue *playlist*
-2. Disinstalla NewPipe
+2. Disinstalla YmnTube
 3. Scarica l'APK dalla nuova fonte e installalo
 4. Importa i dati del passo 1 da Impostazioni > Contenuti > Importa Database
 
@@ -137,6 +137,6 @@ Il progetto NewPipe mira a fornire un'esperienza privata e anonima per usare ser
 
 ## Licenza
 
-[![Immagine GNU GPLv3](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)  
+[![Immagine GNU GPLv3](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 NewPipe è Software Libero: Puoi usarlo, studiarlo, condividerlo e migliorarlo a tuoi piacimento. Specificamente, puoi ridistribuirlo e/o modificarlo sotto i termini della [GNU General Public License](https://www.gnu.org/licenses/gpl.html) come pubblicata dalla Free Software Foundation, o la versione 3 della Licenza, o (a tua scelta) qualsiasi versione successiva.

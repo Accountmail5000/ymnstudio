@@ -1,5 +1,5 @@
-<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p> 
-<h2 align="center"><b>NewPipe</b></h2>
+<p align="center"><a href="https://newpipe.net"><img src="/assets/new_pipe_icon_5.png" width="150"></a></p>
+<h2 align="center"><b>YmnTube</b></h2>
 <h4 align="center">Wolny, lekki streamingowy frontend na Androida.</h4>
 
 <p align="center"><a href="https://f-droid.org/packages/org.schabi.newpipe/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-pl.svg" alt="Pobierz z F-Droid" width=206/></a></p>
@@ -27,7 +27,7 @@
 > [!warning]
 > <b>TO JEST WERSJA BETA, WIĘC MOŻESZ NAPOTKAĆ BŁĘDY. JEŚLI TAK SIĘ STANIE, OTWÓRZ NOWY "ISSUE" NA GITHUBIE.</b>
 >
-> <b>PUBLIKOWANIE NEWPIPE LUB JAKIEGOKOLWIEK JEGO FORKU W SKLEPIE PLAY NARUSZA ICH WARUNKI UŻYTKOWANIA.</b>
+> <b>PUBLIKOWANIE YMNTUBE LUB JAKIEGOKOLWIEK JEGO FORKU W SKLEPIE PLAY NARUSZA ICH WARUNKI UŻYTKOWANIA.</b>
 
 ## Screenshoty
 
@@ -46,7 +46,7 @@
 
 ## Opis
 
-NewPipe nie używa żadnych bibliotek Google ani API YouTube. Strony są jedynie analizowane aby zdobyć wymagane informacje, dzięki czemu ta aplikacja może zostać zainstalowana na urządzeniach bez Usług Google Play. Konto YouTube nie jest wymagane aby używać NewPipe, które jest wolnym oprogramowaniem copyleft.
+YmnTube nie używa żadnych bibliotek Google ani API YouTube. Strony są jedynie analizowane aby zdobyć wymagane informacje, dzięki czemu ta aplikacja może zostać zainstalowana na urządzeniach bez Usług Google Play. Konto YouTube nie jest wymagane aby używać YmnTube, które jest wolnym oprogramowaniem copyleft.
 
 ### Funkcje
 
@@ -90,7 +90,7 @@ NewPipe wspiera wiele usług. Nasza [dokumentacja](https://teamnewpipe.github.io
 * Bandcamp \[beta\]
 
 ## Instalacja i aktualizacje
-Możesz zainstalować NewPipe za pomocą jednej z tych metod:
+Możesz zainstalować YmnTube za pomocą jednej z tych metod:
  1. Dodaj nasze repozytorium do F-Droid i z tamtąd pobierz NewPipe. Instrukcje znajdują się tutaj: https://newpipe.net/FAQ/tutorials/install-add-fdroid-repo/
  2. Pobierz APK z [Wydań na GitHubie](https://github.com/TeamNewPipe/NewPipe/releases) i zainstaluj go.
  3. Zaktualizuj poprzez F-Droid. Jest to najwolniejsza metoda aktualizacji, ponieważ F-Droid musi rozpoznać zmiany, zbudować APK, podpisać go i dopiero wypuścić aktualizację do użytkowników.
@@ -98,9 +98,9 @@ Możesz zainstalować NewPipe za pomocą jednej z tych metod:
 
 Dla większości użytkowników rekomendujemy metodę 1. Pliki APK zainstalowane za pomocą metod 1 lub 2 są ze sobą kompatybilne, lecz nie są kompatybilne z tymi zainstalowanymi metodą 3. Dzieje się tak ponieważ ten sam (nasz) klucz jest używany do podpisania APK z metod 1 i 2, ale APK z metody 3 podpisany jest innym kluczem (F-Droida). Budowanie debug APK z metody 4 w ogóle nie uwzględnia klucza. Klucze podpisu zapewniają, że użytkownik omylnie nie zainstaluje złośliwej aktualizacji żadnej aplikacji.
 
-W międzyczasie, jeśli z jakiegoś powodu chcesz zmienić źródło (np. rdzenna funkcjonalność NewPipe psuje się a F-Droid nie ma jeszcze najnowszej aktualizacji), rekomendujemy użyć następującej procedury:
+W międzyczasie, jeśli z jakiegoś powodu chcesz zmienić źródło (np. rdzenna funkcjonalność YmnTube psuje się a F-Droid nie ma jeszcze najnowszej aktualizacji), rekomendujemy użyć następującej procedury:
 1. Zrób kopię danych wchodząc w Ustawienia > Zawartość > Eksportuj dane, dzięki czemu zachowasz swoją historię, subskrypcje i playlisty
-2. Odinstaluj NewPipe
+2. Odinstaluj YmnTube
 3. Pobierz APK z nowego źródła i zainstaluj go
 4. Przywróć dane z kroku 1 wchodząc w Ustawienia > Zawartość > Importuj dane
 
@@ -127,14 +127,14 @@ Jeśli podoba Ci się NewPipe, bardzo ucieszylibyśmy się z dotacji. Możesz wy
 
 ## Polityka prywatności
 
-Założeniem projektu NewPipe jest dostarczanie prywatnego, anonimowego dostępu do zasobów i usług internetowych. 
+Założeniem projektu YmnTube jest dostarczanie prywatnego, anonimowego dostępu do zasobów i usług internetowych.
 Dlatego też, ta aplikacja nie zbiera żadnych informacji bez twojej zgody. Polityka prywatności NewPipe dokładnie wyjaśnia jakie dane są wysyłane i przechowywane, gdy wyślesz raport awarii lub komentarz na naszym blogu. Możesz znaleźć ten dokument [tutaj](https://newpipe.net/legal/privacy/).
 
 ## Licencja
-[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)  
+[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-NewPipe to wolne oprogramowanie: Możesz używać, uczyć się, udostępniać i ulepszać je do woli. 
+YmnTube to wolne oprogramowanie: Możesz używać, uczyć się, udostępniać i ulepszać je do woli.
 Możesz udostępniać i/lub modyfikować je na zasadach licencji
-[GNU General Public License](https://www.gnu.org/licenses/gpl.html) 
+[GNU General Public License](https://www.gnu.org/licenses/gpl.html)
 publikowaną przez Free Software Foundation, wersję 3 Licencji, lub
-(twój wybór) każdną nowszą wersję.  
+(twój wybór) każdną nowszą wersję.

@@ -6,4 +6,4 @@ Various player fixes, including audio ducking, black screens, and opening links 
 [YouTube] Minor fixes and housekeeping
 Many internal improvements and bug fixes
 
-Thanks to this year's ANU software engineering students who contributed to NewPipe as part of their OSS assignment!
+Thanks to this year's ANU software engineering students who contributed to YmnTube as part of their OSS assignment!

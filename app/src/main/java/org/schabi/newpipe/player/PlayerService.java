@@ -36,6 +36,7 @@ import androidx.media.MediaBrowserServiceCompat;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 
 import org.schabi.newpipe.ktx.BundleKt;
+import org.schabi.newpipe.player.helper.ExclusivePlaybackCoordinator;
 import org.schabi.newpipe.player.mediabrowser.MediaBrowserImpl;
 import org.schabi.newpipe.player.mediabrowser.MediaBrowserPlaybackPreparer;
 import org.schabi.newpipe.player.mediasession.MediaSessionPlayerUi;
@@ -170,6 +171,7 @@ public final class PlayerService extends MediaBrowserServiceCompat {
             return START_NOT_STICKY;
         }
 
+        ExclusivePlaybackCoordinator.stopActive();
         final PlayerType oldPlayerType = player.getPlayerType();
         player.handleIntent(intent);
         player.handleIntentPost(oldPlayerType);

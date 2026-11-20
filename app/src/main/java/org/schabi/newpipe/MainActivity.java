@@ -67,6 +67,7 @@ import org.schabi.newpipe.player.event.OnKeyDownListener;
 import org.schabi.newpipe.player.helper.PlayerHolder;
 import org.schabi.newpipe.player.playqueue.PlayQueue;
 import org.schabi.newpipe.player.ui.MiniPlayerController;
+import org.schabi.newpipe.player.ui.MiniPlayerDismissal;
 import org.schabi.newpipe.settings.UpdateSettingsFragment;
 import org.schabi.newpipe.settings.migration.MigrationManager;
 import org.schabi.newpipe.util.Constants;
@@ -624,6 +625,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openMiniPlayerIfMissing() {
+        if (MiniPlayerDismissal.isDismissed()) {
+            return;
+        }
         final Fragment fragmentPlayer = getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_player_holder);
         if (fragmentPlayer == null) {
@@ -653,6 +657,7 @@ public class MainActivity extends AppCompatActivity {
                     if (Objects.equals(intent.getAction(),
                             VideoDetailFragment.ACTION_PLAYER_STARTED)
                             && PlayerHolder.getInstance().isPlayerOpen()) {
+                        MiniPlayerDismissal.restoreForNewPlayback();
                         openMiniPlayerIfMissing();
                         // At this point the player is added 100%, we can unregister. Other actions
                         // are useless since the fragment will not be removed after that.
