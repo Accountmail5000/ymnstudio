@@ -8,7 +8,7 @@ public final class MiniPlayerDismissal {
     }
 
     private static boolean dismissed;
-    private static final List<Runnable> listeners = new ArrayList<>();
+    private static final List<Runnable> LISTENERS = new ArrayList<>();
 
     public static void dismiss() {
         updateDismissed(true);
@@ -19,12 +19,12 @@ public final class MiniPlayerDismissal {
     }
 
     public static void addListener(final Runnable listener) {
-        listeners.add(listener);
+        LISTENERS.add(listener);
         listener.run();
     }
 
     public static void removeListener(final Runnable listener) {
-        listeners.remove(listener);
+        LISTENERS.remove(listener);
     }
 
     public static boolean isDismissed() {
@@ -42,7 +42,7 @@ public final class MiniPlayerDismissal {
         }
 
         dismissed = newValue;
-        for (final Runnable listener : new ArrayList<>(listeners)) {
+        for (final Runnable listener : new ArrayList<>(LISTENERS)) {
             listener.run();
         }
     }
