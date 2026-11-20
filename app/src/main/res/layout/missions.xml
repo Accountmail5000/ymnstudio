@@ -21,15 +21,14 @@
             android:maxLines="1"
             android:singleLine="true" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/paste_download_link"
-            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:text="@string/download_paste_link" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/start_download_from_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
