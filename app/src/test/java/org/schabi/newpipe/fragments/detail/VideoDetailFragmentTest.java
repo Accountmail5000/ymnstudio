@@ -12,18 +12,24 @@ public class VideoDetailFragmentTest {
     @Test
     public void backgroundPlaybackCollapsesExpandedPlayer() {
         assertTrue(VideoDetailFragment.shouldCollapseMiniPlayer(PlayerType.AUDIO,
-                BottomSheetBehavior.STATE_EXPANDED));
+                BottomSheetBehavior.STATE_EXPANDED, false));
     }
 
     @Test
     public void mainPlayerPreservesExpandedState() {
         assertFalse(VideoDetailFragment.shouldCollapseMiniPlayer(PlayerType.MAIN,
-                BottomSheetBehavior.STATE_EXPANDED));
+                BottomSheetBehavior.STATE_EXPANDED, false));
     }
 
     @Test
     public void hiddenPlayerIsRestoredForAnyPlayerType() {
         assertTrue(VideoDetailFragment.shouldCollapseMiniPlayer(PlayerType.MAIN,
-                BottomSheetBehavior.STATE_HIDDEN));
+                BottomSheetBehavior.STATE_HIDDEN, false));
+    }
+
+    @Test
+    public void backgroundPlaybackDoesNotHideNewlySelectedVideo() {
+        assertFalse(VideoDetailFragment.shouldCollapseMiniPlayer(PlayerType.AUDIO,
+                BottomSheetBehavior.STATE_EXPANDED, true));
     }
 }

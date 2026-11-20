@@ -1511,6 +1511,9 @@ public final class VideoDetailFragment
             public void onReceive(final Context context, final Intent intent) {
                 switch (intent.getAction()) {
                     case ACTION_SHOW_MAIN_PLAYER:
+                        bottomSheetBehavior.getView().setVisibility(View.VISIBLE);
+                        bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelSize(
+                                R.dimen.mini_player_height));
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                         break;
                     case ACTION_HIDE_MAIN_PLAYER:
@@ -1520,7 +1523,7 @@ public final class VideoDetailFragment
                     case ACTION_PLAYER_STARTED:
                         MiniPlayerDismissal.restoreForNewPlayback();
                         if (shouldCollapseMiniPlayer(playerHolder.getType(),
-                                bottomSheetBehavior.getState())) {
+                                bottomSheetBehavior.getState(), url != null)) {
                             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         }
                         // Rebound to the service if it was closed via notification or mini player
@@ -1541,9 +1544,10 @@ public final class VideoDetailFragment
     }
 
     static boolean shouldCollapseMiniPlayer(@Nullable final PlayerType playerType,
-                                            final int bottomSheetState) {
-        return playerType == PlayerType.AUDIO
-                || bottomSheetState == BottomSheetBehavior.STATE_HIDDEN;
+                                            final int bottomSheetState,
+                                            final boolean hasSelectedVideo) {
+        return !hasSelectedVideo && (playerType == PlayerType.AUDIO
+                || bottomSheetState == BottomSheetBehavior.STATE_HIDDEN);
     }
 
 

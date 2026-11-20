@@ -34,6 +34,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
@@ -121,19 +122,6 @@ public class MainActivity extends AppCompatActivity {
         ThemeHelper.setDayNightMode(this);
         ThemeHelper.setTheme(this, ServiceHelper.getSelectedServiceId(this));
 
-        // Fixes text color turning black in dark/black mode:
-        // https://github.com/TeamNewPipe/NewPipe/issues/12016
-        // For further reference see: https://issuetracker.google.com/issues/37124582
-        if (DeviceUtils.supportsWebView()) {
-            try {
-                new WebView(this);
-            } catch (final Throwable e) {
-                if (DEBUG) {
-                    Log.e(TAG, "Failed to create WebView", e);
-                }
-            }
-        }
-
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPrefEditor = sharedPreferences.edit();
@@ -141,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         toolbarLayoutBinding = mainBinding.toolbarLayout;
         setContentView(mainBinding.getRoot());
+        initializeWebViewAfterFirstDraw();
         miniPlayerController = new MiniPlayerController(
                 this,
                 mainBinding.mainBottomNavigation,
@@ -191,6 +180,35 @@ public class MainActivity extends AppCompatActivity {
         }
 
         MigrationManager.showUserInfoIfPresent(this);
+    }
+
+    private void initializeWebViewAfterFirstDraw() {
+        final View decorView = getWindow().getDecorView();
+        final ViewTreeObserver observer = decorView.getViewTreeObserver();
+        observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                if (observer.isAlive()) {
+                    observer.removeOnPreDrawListener(this);
+                }
+                decorView.post(() -> {
+                    if (isFinishing() || isDestroyed() || !DeviceUtils.supportsWebView()) {
+                        return;
+                    }
+
+                    // Initializes WebView's text rendering before any WebView-backed page is used,
+                    // but only after the first frame so it does not hold the launch splash.
+                    try {
+                        new WebView(MainActivity.this);
+                    } catch (final Throwable e) {
+                        if (DEBUG) {
+                            Log.e(TAG, "Failed to create WebView", e);
+                        }
+                    }
+                });
+                return true;
+            }
+        });
     }
 
     @Override

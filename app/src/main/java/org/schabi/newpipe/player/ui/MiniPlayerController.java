@@ -2,6 +2,7 @@ package org.schabi.newpipe.player.ui;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -29,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.databinding.ViewMiniPlayerBinding;
 import org.schabi.newpipe.player.PlayerService;
+import org.schabi.newpipe.player.notification.NotificationConstants;
 
 public final class MiniPlayerController implements DefaultLifecycleObserver {
     private static final String TAG = "MiniPlayerController";
@@ -38,6 +40,7 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
     private final View playerSheet;
     private final Runnable openPlayerAction;
     private final ViewMiniPlayerBinding binding;
+    private final Runnable dismissalStateChangeListener = this::updateVisibility;
     private final BottomSheetBehavior.BottomSheetCallback bottomSheetCallback =
             new BottomSheetBehavior.BottomSheetCallback() {
                 @Override
@@ -122,6 +125,7 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
         binding.getRoot().setOnClickListener(view -> this.openPlayerAction.run());
         binding.miniPlayerPlayPause.setOnClickListener(view -> togglePlayback());
         binding.miniPlayerClose.setOnClickListener(view -> closePlayback());
+        MiniPlayerDismissal.addListener(dismissalStateChangeListener);
     }
 
     @Override
@@ -148,6 +152,7 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
     @Override
     public void onDestroy(@NonNull final LifecycleOwner owner) {
         onStop(owner);
+        MiniPlayerDismissal.removeListener(dismissalStateChangeListener);
         if (bottomSheetBehavior != null && bottomSheetCallbackRegistered) {
             bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback);
             bottomSheetCallbackRegistered = false;
@@ -331,7 +336,8 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
         final boolean playerExpanded = bottomSheetBehavior != null
                 && bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
         binding.getRoot().setVisibility(
-                state.isVisibleWhenPlayerExpanded(playerExpanded) ? View.VISIBLE : View.GONE);
+                MiniPlayerDismissal.isVisible(state.isVisible(), playerExpanded)
+                        ? View.VISIBLE : View.GONE);
     }
 
     private void togglePlayback() {
@@ -348,9 +354,9 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
 
     private void closePlayback() {
         MiniPlayerDismissal.dismiss();
-        if (controller != null) {
-            controller.getTransportControls().stop();
-        }
+        updateVisibility();
+        activity.sendBroadcast(new Intent(NotificationConstants.ACTION_CLOSE)
+                .setPackage(activity.getPackageName()));
     }
 
     private void disconnectController() {

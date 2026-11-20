@@ -20,10 +20,18 @@ public class MiniPlayerDismissalTest {
     }
 
     @Test
+    public void dismissedPlaybackDoesNotShowMiniPlayerAgain() {
+        MiniPlayerDismissal.dismiss();
+
+        assertFalse(MiniPlayerDismissal.isVisible(true, false));
+    }
+
+    @Test
     public void newPlaybackRestoresMiniPlayerRemounting() {
         MiniPlayerDismissal.dismiss();
         MiniPlayerDismissal.restoreForNewPlayback();
 
         assertFalse(MiniPlayerDismissal.isDismissed());
+        assertTrue(MiniPlayerDismissal.isVisible(true, false));
     }
 }
