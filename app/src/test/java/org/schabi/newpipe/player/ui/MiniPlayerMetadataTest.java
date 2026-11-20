@@ -17,8 +17,19 @@ public class MiniPlayerMetadataTest {
     }
 
     @Test
+    public void blankMetadataUsesFallbackInsteadOfRenderingBlankText() {
+        assertEquals("Now playing",
+                MiniPlayerMetadata.titleOrDefault("  ", "", "Now playing"));
+    }
+
+    @Test
     public void displaySubtitleTakesPrecedenceOverArtist() {
         assertEquals("Display creator",
                 MiniPlayerMetadata.creator("Display creator", "Artist", "Album artist"));
+    }
+
+    @Test
+    public void creatorFallsBackToArtistWhenDisplaySubtitleIsMissing() {
+        assertEquals("Artist", MiniPlayerMetadata.creator(null, "Artist", "Album artist"));
     }
 }

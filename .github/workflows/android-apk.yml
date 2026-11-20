@@ -35,6 +35,8 @@ jobs:
           --tests org.schabi.newpipe.local.feed.FeedInitialLoadGateTest
           --tests org.schabi.newpipe.player.ui.MiniPlayerStateTest
           --tests org.schabi.newpipe.player.ui.MiniPlayerMetadataTest
+          --tests org.schabi.newpipe.player.ui.MiniPlayerLayoutPolicyTest
+          --tests org.schabi.newpipe.fragments.detail.FullscreenLayoutPolicyTest
           --tests org.schabi.newpipe.fragments.list.recommendations.RecommendationGridPolicyTest
           -x :app:runKtlint
 

@@ -159,6 +159,22 @@ public final class VideoDetailFragment
     private static final String RELATED_TAB_TAG = "NEXT VIDEO";
     private static final String DESCRIPTION_TAB_TAG = "DESCRIPTION TAB";
     private static final String EMPTY_TAB_TAG = "EMPTY TAB";
+    private static final String STATE_FULLSCREEN_CHROME_CAPTURED =
+            "video_detail.fullscreen_chrome_captured";
+    private static final String STATE_FULLSCREEN_REQUESTED_ORIENTATION =
+            "video_detail.fullscreen_requested_orientation";
+    private static final String STATE_FULLSCREEN_TOOLBAR_VISIBILITY =
+            "video_detail.fullscreen_toolbar_visibility";
+    private static final String STATE_FULLSCREEN_NAVIGATION_VISIBILITY =
+            "video_detail.fullscreen_navigation_visibility";
+    private static final String STATE_FULLSCREEN_DETAIL_VISIBILITY =
+            "video_detail.fullscreen_detail_visibility";
+    private static final String STATE_FULLSCREEN_PAGER_VISIBILITY =
+            "video_detail.fullscreen_pager_visibility";
+    private static final String STATE_FULLSCREEN_TABS_VISIBILITY =
+            "video_detail.fullscreen_tabs_visibility";
+    private static final String STATE_FULLSCREEN_PLAYER_BOTTOM_MARGIN =
+            "video_detail.fullscreen_player_bottom_margin";
 
     // tabs
     private boolean showComments;
@@ -205,6 +221,14 @@ public final class VideoDetailFragment
     @State
     protected boolean autoPlayEnabled = true;
     private boolean forceFullscreen = false;
+    private boolean fullscreenChromeStateCaptured;
+    private int fullscreenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+    private int fullscreenToolbarVisibility = View.VISIBLE;
+    private int fullscreenNavigationVisibility = View.VISIBLE;
+    private int fullscreenDetailVisibility = View.VISIBLE;
+    private int fullscreenPagerVisibility = View.VISIBLE;
+    private int fullscreenTabsVisibility = View.VISIBLE;
+    private int fullscreenPlayerBottomMargin;
 
     @Nullable
     private StreamInfo currentInfo = null;
@@ -265,6 +289,9 @@ public final class VideoDetailFragment
             playerUi.ifPresent(MainPlayerUi::toggleFullscreen);
         }
 
+        player.UIs().get(MainPlayerUi.class)
+                .ifPresent(playerUi -> applyFullscreenChrome(playerUi.isFullscreen()));
+
         if (playAfterConnect
                 || (currentInfo != null
                 && isAutoplayEnabled()
@@ -316,6 +343,26 @@ public final class VideoDetailFragment
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null
+                && savedInstanceState.getBoolean(STATE_FULLSCREEN_CHROME_CAPTURED)) {
+            fullscreenChromeStateCaptured = true;
+            fullscreenRequestedOrientation = savedInstanceState.getInt(
+                    STATE_FULLSCREEN_REQUESTED_ORIENTATION,
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            fullscreenToolbarVisibility = savedInstanceState.getInt(
+                    STATE_FULLSCREEN_TOOLBAR_VISIBILITY, View.VISIBLE);
+            fullscreenNavigationVisibility = savedInstanceState.getInt(
+                    STATE_FULLSCREEN_NAVIGATION_VISIBILITY, View.VISIBLE);
+            fullscreenDetailVisibility = savedInstanceState.getInt(
+                    STATE_FULLSCREEN_DETAIL_VISIBILITY, View.VISIBLE);
+            fullscreenPagerVisibility = savedInstanceState.getInt(
+                    STATE_FULLSCREEN_PAGER_VISIBILITY, View.VISIBLE);
+            fullscreenTabsVisibility = savedInstanceState.getInt(
+                    STATE_FULLSCREEN_TABS_VISIBILITY, View.VISIBLE);
+            fullscreenPlayerBottomMargin = savedInstanceState.getInt(
+                    STATE_FULLSCREEN_PLAYER_BOTTOM_MARGIN);
+        }
+
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         showComments = prefs.getBoolean(getString(R.string.show_comments_key), true);
         showRelatedItems = prefs.getBoolean(getString(R.string.show_next_video_key), true);
@@ -337,6 +384,22 @@ public final class VideoDetailFragment
         activity.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION), false,
                 settingsContentObserver);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_FULLSCREEN_CHROME_CAPTURED, fullscreenChromeStateCaptured);
+        outState.putInt(STATE_FULLSCREEN_REQUESTED_ORIENTATION,
+                fullscreenRequestedOrientation);
+        outState.putInt(STATE_FULLSCREEN_TOOLBAR_VISIBILITY, fullscreenToolbarVisibility);
+        outState.putInt(STATE_FULLSCREEN_NAVIGATION_VISIBILITY,
+                fullscreenNavigationVisibility);
+        outState.putInt(STATE_FULLSCREEN_DETAIL_VISIBILITY, fullscreenDetailVisibility);
+        outState.putInt(STATE_FULLSCREEN_PAGER_VISIBILITY, fullscreenPagerVisibility);
+        outState.putInt(STATE_FULLSCREEN_TABS_VISIBILITY, fullscreenTabsVisibility);
+        outState.putInt(STATE_FULLSCREEN_PLAYER_BOTTOM_MARGIN,
+                fullscreenPlayerBottomMargin);
     }
 
     @Override
@@ -1485,7 +1548,11 @@ public final class VideoDetailFragment
 
     private void restoreDefaultOrientation() {
         if (isPlayerAvailable() && player.videoPlayerSelected()) {
-            toggleFullscreenIfInFullscreenMode();
+            final Optional<MainPlayerUi> mainPlayerUi = player.UIs().get(MainPlayerUi.class);
+            if (mainPlayerUi.map(MainPlayerUi::isFullscreen).orElse(false)) {
+                mainPlayerUi.ifPresent(MainPlayerUi::toggleFullscreen);
+                return;
+            }
         }
 
         // This will show systemUI and pause the player.
@@ -1494,6 +1561,87 @@ public final class VideoDetailFragment
         // to physically rotate the tablet every time
         if (activity != null && !DeviceUtils.isTablet(activity)) {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
+    }
+
+    private void applyFullscreenChrome(final boolean fullscreen) {
+        if (activity == null) {
+            return;
+        }
+
+        final View toolbar = activity.findViewById(R.id.toolbar_layout);
+        final View navigation = activity.findViewById(R.id.main_bottom_navigation);
+        final View playerHolder = activity.findViewById(R.id.fragment_player_holder);
+        if (toolbar == null || navigation == null || playerHolder == null) {
+            return;
+        }
+
+        final ViewGroup.LayoutParams layoutParams = playerHolder.getLayoutParams();
+        if (!(layoutParams instanceof ViewGroup.MarginLayoutParams)) {
+            return;
+        }
+        final ViewGroup.MarginLayoutParams marginParams =
+                (ViewGroup.MarginLayoutParams) layoutParams;
+
+        if (fullscreen) {
+            if (!fullscreenChromeStateCaptured) {
+                fullscreenRequestedOrientation = activity.getRequestedOrientation();
+                fullscreenToolbarVisibility = toolbar.getVisibility();
+                fullscreenNavigationVisibility = navigation.getVisibility();
+                if (binding != null) {
+                    fullscreenDetailVisibility =
+                            binding.detailContentRootLayout.getVisibility();
+                    fullscreenPagerVisibility = binding.viewPager.getVisibility();
+                    fullscreenTabsVisibility = binding.tabLayout.getVisibility();
+                }
+                fullscreenPlayerBottomMargin = marginParams.bottomMargin;
+                fullscreenChromeStateCaptured = true;
+            }
+
+            toolbar.setVisibility(FullscreenLayoutPolicy.chromeVisibility(
+                    true, fullscreenToolbarVisibility));
+            navigation.setVisibility(FullscreenLayoutPolicy.chromeVisibility(
+                    true, fullscreenNavigationVisibility));
+            if (binding != null) {
+                binding.detailContentRootLayout.setVisibility(
+                        FullscreenLayoutPolicy.chromeVisibility(
+                                true, fullscreenDetailVisibility));
+                binding.viewPager.setVisibility(FullscreenLayoutPolicy.chromeVisibility(
+                        true, fullscreenPagerVisibility));
+                binding.tabLayout.setVisibility(FullscreenLayoutPolicy.chromeVisibility(
+                        true, fullscreenTabsVisibility));
+            }
+            marginParams.bottomMargin = FullscreenLayoutPolicy.playerBottomMargin(
+                    true, fullscreenPlayerBottomMargin);
+            playerHolder.setLayoutParams(marginParams);
+            final int fullscreenOrientation = FullscreenLayoutPolicy.requestedOrientation(
+                    true, fullscreenRequestedOrientation);
+            if (activity.getRequestedOrientation() != fullscreenOrientation) {
+                activity.setRequestedOrientation(fullscreenOrientation);
+            }
+        } else if (fullscreenChromeStateCaptured) {
+            toolbar.setVisibility(FullscreenLayoutPolicy.chromeVisibility(
+                    false, fullscreenToolbarVisibility));
+            navigation.setVisibility(FullscreenLayoutPolicy.chromeVisibility(
+                    false, fullscreenNavigationVisibility));
+            if (binding != null) {
+                binding.detailContentRootLayout.setVisibility(
+                        FullscreenLayoutPolicy.chromeVisibility(
+                                false, fullscreenDetailVisibility));
+                binding.viewPager.setVisibility(FullscreenLayoutPolicy.chromeVisibility(
+                        false, fullscreenPagerVisibility));
+                binding.tabLayout.setVisibility(FullscreenLayoutPolicy.chromeVisibility(
+                        false, fullscreenTabsVisibility));
+            }
+            marginParams.bottomMargin = FullscreenLayoutPolicy.playerBottomMargin(
+                    false, fullscreenPlayerBottomMargin);
+            playerHolder.setLayoutParams(marginParams);
+            fullscreenChromeStateCaptured = false;
+            final int restoredOrientation = FullscreenLayoutPolicy.requestedOrientation(
+                    false, fullscreenRequestedOrientation);
+            if (activity.getRequestedOrientation() != restoredOrientation) {
+                activity.setRequestedOrientation(restoredOrientation);
+            }
         }
     }
 
@@ -1918,6 +2066,7 @@ public final class VideoDetailFragment
 
     @Override
     public void onFullscreenStateChanged(final boolean fullscreen) {
+        applyFullscreenChrome(fullscreen);
         setupBrightness();
         if (!isPlayerAndPlayerServiceAvailable()
                 || player.UIs().get(MainPlayerUi.class).isEmpty()
@@ -1956,6 +2105,14 @@ public final class VideoDetailFragment
                 && (!globalScreenOrientationLocked(activity) || isLandscape)) {
             player.UIs().get(MainPlayerUi.class).ifPresent(MainPlayerUi::toggleFullscreen);
             return;
+        }
+
+        if (!isLandscape) {
+            final Optional<MainPlayerUi> mainPlayerUi = player.UIs().get(MainPlayerUi.class);
+            if (mainPlayerUi.isPresent() && !mainPlayerUi.get().isFullscreen()) {
+                mainPlayerUi.get().toggleFullscreen();
+                return;
+            }
         }
 
         final int newOrientation = isLandscape

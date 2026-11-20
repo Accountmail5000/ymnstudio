@@ -46,6 +46,9 @@ public class RecommendedVideosFragment extends BaseListInfoFragment<InfoItem, Se
     private static final String TAG = RecommendedVideosFragment.class.getSimpleName();
     private static final int MAX_HISTORY_ITEMS_TO_ANALYZE = 10;
 
+    @Nullable
+    private View.OnLayoutChangeListener recommendationLayoutChangeListener;
+
     @State
     String searchQuery;
 
@@ -79,6 +82,25 @@ public class RecommendedVideosFragment extends BaseListInfoFragment<InfoItem, Se
             searchQuery = null;
             reloadContent();
         }
+    }
+
+    @Override
+    protected void initViews(final View rootView, final Bundle savedInstanceState) {
+        super.initViews(rootView, savedInstanceState);
+        recommendationLayoutChangeListener =
+                (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) ->
+                        updateRecommendationColumnCount();
+        itemsList.addOnLayoutChangeListener(recommendationLayoutChangeListener);
+        itemsList.post(this::updateRecommendationColumnCount);
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (recommendationLayoutChangeListener != null && itemsList != null) {
+            itemsList.removeOnLayoutChangeListener(recommendationLayoutChangeListener);
+            recommendationLayoutChangeListener = null;
+        }
+        super.onDestroyView();
     }
 
     @Override
@@ -118,6 +140,24 @@ public class RecommendedVideosFragment extends BaseListInfoFragment<InfoItem, Se
         return layoutManager;
     }
 
+    private void updateRecommendationColumnCount() {
+        if (itemsList == null || itemsList.getWidth() <= 0
+                || !(itemsList.getLayoutManager() instanceof GridLayoutManager)) {
+            return;
+        }
+
+        final int availableWidth = itemsList.getWidth()
+                - itemsList.getPaddingLeft() - itemsList.getPaddingRight();
+        final int spanCount = RecommendationGridPolicy.getColumnCountForWidth(
+                availableWidth, getResources().getDisplayMetrics().density);
+        final GridLayoutManager layoutManager =
+                (GridLayoutManager) itemsList.getLayoutManager();
+        if (layoutManager.getSpanCount() != spanCount) {
+            layoutManager.setSpanCount(spanCount);
+            layoutManager.setSpanSizeLookup(infoListAdapter.getSpanSizeLookup(spanCount));
+        }
+    }
+
     private Single<String> getRecommendationQuery() {
         final String fallbackQuery = getString(R.string.trending);
         final HistoryRecordManager historyRecordManager =
@@ -125,6 +165,10 @@ public class RecommendedVideosFragment extends BaseListInfoFragment<InfoItem, Se
 
         return historyRecordManager.getStreamHistorySortedById()
                 .firstOrError()
+                .onErrorReturn(error -> {
+                    Log.w(TAG, "Could not read watch history; loading trending instead", error);
+                    return List.of();
+                })
                 .flatMap(history -> {
                     final List<StreamHistoryEntry> candidates = history.stream()
                             .filter(entry -> entry.getStreamEntity().getServiceId() == serviceId)

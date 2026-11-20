@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -57,7 +58,7 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
     private MiniPlayerState state = MiniPlayerState.from(
             false, PlaybackStateCompat.STATE_NONE);
     private boolean bottomSheetCallbackRegistered;
-    private boolean updateBottomMarginOnNavigationLayout;
+    private boolean updateBottomMarginOnLayout;
     private final View.OnLayoutChangeListener navigationLayoutChangeListener =
             (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) ->
                     updateBottomMargin();
@@ -151,8 +152,12 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
             bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback);
             bottomSheetCallbackRegistered = false;
         }
-        if (updateBottomMarginOnNavigationLayout) {
+        if (updateBottomMarginOnLayout) {
             navigation.removeOnLayoutChangeListener(navigationLayoutChangeListener);
+            final ViewGroup parent = (ViewGroup) navigation.getParent();
+            if (parent != null) {
+                parent.removeOnLayoutChangeListener(navigationLayoutChangeListener);
+            }
         }
         final ViewGroup parent = (ViewGroup) binding.getRoot().getParent();
         if (parent != null) {
@@ -186,10 +191,10 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
                     new CoordinatorLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT);
-            coordinatorParams.setAnchorId(navigation.getId());
-            coordinatorParams.anchorGravity = Gravity.TOP;
-            coordinatorParams.gravity = Gravity.BOTTOM;
+            coordinatorParams.gravity = Gravity.BOTTOM | Gravity.START;
+            coordinatorParams.bottomMargin = getNavigationTopMargin(parent);
             params = coordinatorParams;
+            updateBottomMarginOnLayout = true;
         } else if (parent instanceof RelativeLayout) {
             final RelativeLayout.LayoutParams relativeParams =
                     new RelativeLayout.LayoutParams(
@@ -204,17 +209,17 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     Gravity.BOTTOM);
-            frameParams.bottomMargin = navigation.getHeight();
+            frameParams.bottomMargin = getNavigationTopMargin(parent);
             params = frameParams;
-            updateBottomMarginOnNavigationLayout = true;
+            updateBottomMarginOnLayout = true;
         } else if (parent instanceof DrawerLayout) {
             final DrawerLayout.LayoutParams drawerParams = new DrawerLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     Gravity.BOTTOM);
-            drawerParams.bottomMargin = navigation.getHeight();
+            drawerParams.bottomMargin = getNavigationTopMargin(parent);
             params = drawerParams;
-            updateBottomMarginOnNavigationLayout = true;
+            updateBottomMarginOnLayout = true;
         } else {
             params = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -222,19 +227,35 @@ public final class MiniPlayerController implements DefaultLifecycleObserver {
             Log.w(TAG, "Using fallback mini-player placement for "
                     + parent.getClass().getSimpleName());
         }
-        parent.addView(binding.getRoot(), index, params);
-        if (updateBottomMarginOnNavigationLayout) {
+        final int insertionIndex = parent instanceof LinearLayout
+                && ((LinearLayout) parent).getOrientation() == LinearLayout.VERTICAL
+                ? index : index + 1;
+        parent.addView(binding.getRoot(), insertionIndex, params);
+        ViewCompat.setElevation(binding.getRoot(),
+                ViewCompat.getElevation(navigation)
+                        + activity.getResources().getDisplayMetrics().density);
+        if (updateBottomMarginOnLayout) {
             navigation.addOnLayoutChangeListener(navigationLayoutChangeListener);
+            parent.addOnLayoutChangeListener(navigationLayoutChangeListener);
         }
     }
 
+    private int getNavigationTopMargin(@NonNull final ViewGroup parent) {
+        return MiniPlayerLayoutPolicy.getBottomMargin(parent.getHeight(), navigation.getTop());
+    }
+
     private void updateBottomMargin() {
+        final ViewGroup parent = (ViewGroup) binding.getRoot().getParent();
+        if (parent == null) {
+            return;
+        }
         final ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
         if (params instanceof ViewGroup.MarginLayoutParams) {
             final ViewGroup.MarginLayoutParams marginParams =
                     (ViewGroup.MarginLayoutParams) params;
-            if (marginParams.bottomMargin != navigation.getHeight()) {
-                marginParams.bottomMargin = navigation.getHeight();
+            final int navigationTopMargin = getNavigationTopMargin(parent);
+            if (marginParams.bottomMargin != navigationTopMargin) {
+                marginParams.bottomMargin = navigationTopMargin;
                 binding.getRoot().setLayoutParams(marginParams);
             }
         }
