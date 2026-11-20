@@ -10,10 +10,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.schabi.newpipe.extractor.MediaFormat;
+import org.schabi.newpipe.extractor.stream.VideoStream;
 
 import java.util.ArrayList;
-
-import org.schabi.newpipe.extractor.MediaFormat;
 
 import us.shandian.giga.get.MissionRecoveryInfo;
 
@@ -23,7 +23,12 @@ public class DownloadManagerServiceIntentTest {
     public void recoveryInfoSurvivesServiceIntentParceling() {
         final ArrayList<MissionRecoveryInfo> recoveryInfo =
                 new ArrayList<>();
-        recoveryInfo.add(new MissionRecoveryInfo((MediaFormat) null));
+        recoveryInfo.add(new MissionRecoveryInfo(new VideoStream.Builder()
+                .setId("recovery-test")
+                .setContent("", true)
+                .setResolution("360p")
+                .setMediaFormat(MediaFormat.MPEG_4)
+                .build()));
         final Intent intent = new Intent();
         DownloadManagerService.putRecoveryInfo(intent, recoveryInfo);
 
