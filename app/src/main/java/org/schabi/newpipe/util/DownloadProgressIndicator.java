@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.view.MenuItem;
 
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -63,8 +64,10 @@ public final class DownloadProgressIndicator implements DefaultLifecycleObserver
                             navigationView.getOrCreateBadge(R.id.main_navigation_downloads);
                     badge.setMaxCharacterCount(4);
                     badge.setNumber(progress);
-                    badge.setContentDescriptionQuantityStrings(
-                            R.plurals.download_progress_percentage);
+                    final MenuItem downloadsItem =
+                            navigationView.getMenu().findItem(R.id.main_navigation_downloads);
+                    downloadsItem.setContentDescription(activity.getString(
+                            R.string.download_progress_accessibility, progress));
                 }
             }
             handler.postDelayed(this, POLL_INTERVAL_MS);
@@ -114,5 +117,8 @@ public final class DownloadProgressIndicator implements DefaultLifecycleObserver
 
     private void clearBadge() {
         navigationView.removeBadge(R.id.main_navigation_downloads);
+        final MenuItem downloadsItem =
+                navigationView.getMenu().findItem(R.id.main_navigation_downloads);
+        downloadsItem.setContentDescription(activity.getString(R.string.downloads));
     }
 }

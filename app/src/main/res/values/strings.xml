@@ -21,6 +21,7 @@
     <string name="download_link_invalid">Enter a valid HTTP or HTTPS link.</string>
     <string name="download_link_unsupported">This source is not supported for downloads.</string>
     <string name="download_link_clipboard_empty">There is no link in the clipboard.</string>
+    <string name="download_progress_accessibility">Downloads, %1$d percent complete</string>
     <string name="controls_download_desc">Download stream file</string>
     <string name="search">Search</string>
     <string name="search_with_service_name">Search %1$s</string>
@@ -173,10 +174,6 @@
     <string name="duration_live">Live</string>
     <string name="downloads">Downloads</string>
     <string name="downloads_title">Downloads</string>
-    <plurals name="download_progress_percentage">
-        <item quantity="one">Download progress: %d percent</item>
-        <item quantity="other">Download progress: %d percent</item>
-    </plurals>
     <string name="loading_metadata_title">Loading Metadata…</string>
     <string name="error_report_title">Error report</string>
     <string name="all">All</string>
