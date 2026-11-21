@@ -9,6 +9,10 @@
         android:icon="@drawable/ic_file_download"
         android:title="@string/downloads" />
     <item
+        android:id="@+id/main_navigation_shorts"
+        android:icon="@drawable/ic_smart_display"
+        android:title="@string/channel_tab_shorts" />
+    <item
         android:id="@+id/main_navigation_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />

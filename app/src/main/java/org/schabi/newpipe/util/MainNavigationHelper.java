@@ -40,6 +40,9 @@ public final class MainNavigationHelper {
                     || itemId == R.id.main_navigation_history) {
                 openMainDestination(activity, itemId);
                 return true;
+            } else if (itemId == R.id.main_navigation_shorts) {
+                openMainDestination(activity, itemId);
+                return true;
             } else if (itemId == R.id.main_navigation_downloads) {
                 return activity instanceof DownloadActivity
                         || NavigationHelper.openDownloads(activity);

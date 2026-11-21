@@ -257,6 +257,9 @@ public class MainActivity extends AppCompatActivity {
                     || itemId == R.id.main_navigation_history) {
                 navigateToMainDestination(itemId);
                 return true;
+            } else if (itemId == R.id.main_navigation_shorts) {
+                navigateToMainDestination(itemId);
+                return true;
             } else if (itemId == R.id.main_navigation_downloads) {
                 return NavigationHelper.openDownloads(this);
             } else if (itemId == R.id.main_navigation_settings) {
@@ -273,6 +276,10 @@ public class MainActivity extends AppCompatActivity {
             NavigationHelper.gotoMainFragment(fragmentManager);
             NavigationHelper.openStatisticFragment(fragmentManager);
             setMainNavigationSelection(destination);
+        } else if (destination == R.id.main_navigation_shorts) {
+            NavigationHelper.openShortsFragment(fragmentManager,
+                    ServiceHelper.getSelectedServiceId(this));
+            setMainNavigationSelection(destination);
         } else {
             NavigationHelper.gotoMainFragment(fragmentManager);
             setMainNavigationSelection(R.id.main_navigation_home);
@@ -286,6 +293,9 @@ public class MainActivity extends AppCompatActivity {
             setMainNavigationSelection(R.id.main_navigation_home);
         } else if (fragment instanceof StatisticsPlaylistFragment) {
             setMainNavigationSelection(R.id.main_navigation_history);
+        } else if (fragment instanceof SearchFragment
+                && ((SearchFragment) fragment).isShortsPage()) {
+            setMainNavigationSelection(R.id.main_navigation_shorts);
         }
         updateToolbarBrandLogoVisibility();
     }

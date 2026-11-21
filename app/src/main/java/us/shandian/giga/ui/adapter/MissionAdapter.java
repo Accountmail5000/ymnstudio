@@ -124,6 +124,7 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
                     return Math.max(1, value.getByteCount() / 1024);
                 }
             };
+    private static final LruCache<String, Long> VIDEO_DURATION_CACHE = new LruCache<>(200);
 
     private final Context mContext;
     private final LayoutInflater mInflater;
@@ -141,6 +142,8 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
     private final View mView;
     private final ArrayList<Mission> mHidden;
     private Snackbar mSnackbar;
+    private boolean mVideosOnly;
+    private final ArrayList<Integer> mVisiblePositions = new ArrayList<>();
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -164,6 +167,7 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         mHidden = new ArrayList<>();
 
         checkEmptyMessageVisibility();
+        rebuildVisiblePositions();
         onResume();
     }
 
@@ -202,7 +206,7 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
     @Override
     @SuppressLint("SetTextI18n")
     public void onBindViewHolder(@NonNull ViewHolder view, @SuppressLint("RecyclerView") int pos) {
-        DownloadManager.MissionItem item = mIterator.getItem(pos);
+        DownloadManager.MissionItem item = mIterator.getItem(mVisiblePositions.get(pos));
 
         if (view instanceof ViewHolderHeader) {
             if (item.special == DownloadManager.SPECIAL_NOTHING) return;
@@ -228,9 +232,12 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         h.icon.setImageTintList(ColorStateList.valueOf(
                 ThemeHelper.resolveColorFromAttr(mContext, R.attr.actionColor)));
         h.icon.setTag(R.id.item_icon, null);
-        if (item.mission instanceof FinishedMission && item.mission.kind == 'v'
-                && !item.mission.storage.isInvalid()) {
+        h.duration.setVisibility(View.GONE);
+        h.icon.setContentDescription(mContext.getString(
+                R.string.download_thumbnail_description, item.mission.storage.getName()));
+        if (item.mission.kind == 'v' && !item.mission.storage.isInvalid()) {
             loadVideoThumbnail(h, item.mission.storage.getUri());
+            loadVideoDuration(h, item.mission.storage.getUri());
         }
         h.name.setText(item.mission.storage.getName());
 
@@ -246,27 +253,26 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
             updateProgress(h);
             mPendingDownloadsItems.add(h);
 
-            h.date.setText("");
+            h.date.setText(formatDownloadAge(item.mission.timestamp,
+                    System.currentTimeMillis()));
         } else {
             h.progress.setMarquee(false);
             h.status.setText("100%");
             h.progress.setProgress(1.0f);
             h.size.setText(Utility.formatBytes(item.mission.length));
-
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
-            Date date = new Date(item.mission.timestamp);
-            h.date.setText(dateFormat.format(date));
+            h.date.setText(formatDownloadAge(item.mission.timestamp,
+                    System.currentTimeMillis()));
         }
     }
 
     @Override
     public int getItemCount() {
-        return mIterator.getOldListSize();
+        return mVisiblePositions.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mIterator.getSpecialAtItem(position);
+        return mIterator.getSpecialAtItem(mVisiblePositions.get(position));
     }
 
     @SuppressLint("DefaultLocale")
@@ -411,6 +417,72 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         chooserIntent.addFlags(FLAG_GRANT_PREFIX_URI_PERMISSION);
 
         ShareUtils.openIntentInApp(mContext, chooserIntent);
+    }
+
+    private void loadVideoDuration(@NonNull final ViewHolderItem holder,
+                                   @NonNull final Uri uri) {
+        final String cacheKey = uri.toString();
+        final Long cachedDuration = VIDEO_DURATION_CACHE.get(cacheKey);
+        if (cachedDuration != null) {
+            holder.duration.setText(formatDuration(cachedDuration));
+            holder.duration.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        VIDEO_THUMBNAIL_EXECUTOR.execute(() -> {
+            final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            long duration = -1L;
+            try {
+                retriever.setDataSource(mContext, uri);
+                final String durationText = retriever.extractMetadata(
+                        MediaMetadataRetriever.METADATA_KEY_DURATION);
+                if (durationText != null) {
+                    duration = Long.parseLong(durationText);
+                }
+            } catch (final RuntimeException | NumberFormatException e) {
+                Log.w(TAG, "Unable to load duration for downloaded video " + uri, e);
+            } finally {
+                try {
+                    retriever.release();
+                } catch (final IOException | RuntimeException e) {
+                    Log.w(TAG, "Unable to release duration retriever", e);
+                }
+            }
+
+            if (duration >= 0L) {
+                final long finalDuration = duration;
+                VIDEO_DURATION_CACHE.put(cacheKey, finalDuration);
+                MAIN_THREAD_HANDLER.post(() -> {
+                    if (holder.item != null
+                            && cacheKey.equals(holder.icon.getTag(R.id.item_icon))) {
+                        holder.duration.setText(formatDuration(finalDuration));
+                        holder.duration.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+    }
+
+    static String formatDuration(final long milliseconds) {
+        if (milliseconds <= 0L) return "";
+        final long totalSeconds = milliseconds / 1000L;
+        final long hours = totalSeconds / 3600L;
+        final long minutes = (totalSeconds % 3600L) / 60L;
+        final long seconds = totalSeconds % 60L;
+        return hours > 0L
+                ? String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
+                : String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
+    }
+
+    static String formatDownloadAge(final long timestamp, final long now) {
+        final long ageMillis = Math.max(0L, now - timestamp);
+        final long ageDays = ageMillis / (24L * 60L * 60L * 1000L);
+        if (ageDays == 0L) return "Today";
+        if (ageDays == 1L) return "Yesterday";
+        if (ageDays < 7L) return ageDays + " days ago";
+        if (ageDays < 30L) return (ageDays / 7L) + "w ago";
+        if (ageDays < 365L) return (ageDays / 30L) + "mo ago";
+        return (ageDays / 365L) + "y ago";
     }
 
     private void loadVideoThumbnail(@NonNull final ViewHolderItem holder,
@@ -853,6 +925,8 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         mIterator.start();
         DiffUtil.calculateDiff(mIterator, true).dispatchUpdatesTo(this);
         mIterator.end();
+        rebuildVisiblePositions();
+        notifyDataSetChanged();
 
         checkEmptyMessageVisibility();
         if (mClear != null) mClear.setVisible(mIterator.hasFinishedMissions());
@@ -871,6 +945,45 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
 
     public void setLinear(boolean isLinear) {
         mLayout = isLinear ? R.layout.mission_item_linear : R.layout.mission_item;
+    }
+
+    public void setVideosOnly(final boolean videosOnly) {
+        if (mVideosOnly != videosOnly) {
+            mVideosOnly = videosOnly;
+            rebuildVisiblePositions();
+            notifyDataSetChanged();
+            checkEmptyMessageVisibility();
+        }
+    }
+
+    private void rebuildVisiblePositions() {
+        mVisiblePositions.clear();
+        final int oldSize = mIterator.getOldListSize();
+        int sectionHeaderPosition = -1;
+        final ArrayList<Integer> sectionMatches = new ArrayList<>();
+
+        for (int position = 0; position < oldSize; position++) {
+            final int special = mIterator.getSpecialAtItem(position);
+            if (special != DownloadManager.SPECIAL_NOTHING) {
+                if (sectionHeaderPosition >= 0 && !sectionMatches.isEmpty()) {
+                    mVisiblePositions.add(sectionHeaderPosition);
+                    mVisiblePositions.addAll(sectionMatches);
+                }
+                sectionHeaderPosition = position;
+                sectionMatches.clear();
+                continue;
+            }
+
+            final Mission mission = mIterator.getItem(position).mission;
+            if (!mVideosOnly || mission.kind == 'v') {
+                sectionMatches.add(position);
+            }
+        }
+
+        if (sectionHeaderPosition >= 0 && !sectionMatches.isEmpty()) {
+            mVisiblePositions.add(sectionHeaderPosition);
+            mVisiblePositions.addAll(sectionMatches);
+        }
     }
 
     public void setClearButton(MenuItem clearButton) {
@@ -971,6 +1084,7 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
         TextView name;
         TextView size;
         TextView date;
+        TextView duration;
         ProgressDrawable progress;
 
         PopupMenu popupMenu;
@@ -1002,6 +1116,7 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
             icon = itemView.findViewById(R.id.item_icon);
             size = itemView.findViewById(R.id.item_size);
             date = itemView.findViewById(R.id.item_date);
+            duration = itemView.findViewById(R.id.item_duration);
 
             name.setSelected(true);
 
