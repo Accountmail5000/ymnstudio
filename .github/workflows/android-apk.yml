@@ -43,6 +43,7 @@ jobs:
           --tests org.schabi.newpipe.download.DownloadLinkInputTest
           --tests us.shandian.giga.service.DownloadProgressCalculatorTest
           --tests us.shandian.giga.service.DownloadProgressSnapshotTest
+          --tests us.shandian.giga.ui.adapter.MissionAdapterTest
           -x :app:runKtlint
 
       - name: Build debug APK
