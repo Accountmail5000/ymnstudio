@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.chip.ChipGroup;
 import com.nononsenseapps.filepicker.Utils;
 
 import org.schabi.newpipe.R;
@@ -135,6 +136,9 @@ public class MissionsFragment extends Fragment {
         startDownloadFromLink = v.findViewById(R.id.start_download_from_link);
         v.findViewById(R.id.paste_download_link).setOnClickListener(view -> pasteLinkFromClipboard());
         startDownloadFromLink.setOnClickListener(view -> downloadFromLink());
+        final ChipGroup downloadFilterGroup = v.findViewById(R.id.download_filter_group);
+        downloadFilterGroup.setOnCheckedChangeListener((group, checkedId) ->
+                applyDownloadFilter(checkedId));
 
         // Init layouts managers
         mGridManager = new GridLayoutManager(getActivity(), SPAN_SIZE);
@@ -361,6 +365,12 @@ public class MissionsFragment extends Fragment {
 
         mAdapter.setClearButton(mClear);
         mAdapter.setMasterButtons(mStart, mPause);
+    }
+
+    private void applyDownloadFilter(final int checkedId) {
+        if (mAdapter != null) {
+            mAdapter.setVideosOnly(checkedId == R.id.download_filter_videos);
+        }
     }
 
     private void recoverMission(@NonNull DownloadMission mission) {

@@ -122,6 +122,8 @@ public class SearchFragment extends BaseListFragment<SearchInfo, ListExtractor.I
     // these three represents the current search query
     @State
     String searchString;
+    @State
+    boolean shortsPage;
 
     /**
      * No content filter should add like contentFilter = all
@@ -192,6 +194,17 @@ public class SearchFragment extends BaseListFragment<SearchInfo, ListExtractor.I
         }
 
         return searchFragment;
+    }
+
+    public static SearchFragment getShortsInstance(final int serviceId) {
+        final SearchFragment searchFragment =
+                getInstance(serviceId, "shorts");
+        searchFragment.shortsPage = true;
+        return searchFragment;
+    }
+
+    public boolean isShortsPage() {
+        return shortsPage;
     }
 
     /**
@@ -280,6 +293,9 @@ public class SearchFragment extends BaseListFragment<SearchInfo, ListExtractor.I
             Log.d(TAG, "onResume() called");
         }
         super.onResume();
+        if (shortsPage) {
+            setTitle(getString(R.string.channel_tab_shorts));
+        }
 
         if (suggestionDisposable == null || suggestionDisposable.isDisposed()) {
             initSuggestionObserver();
