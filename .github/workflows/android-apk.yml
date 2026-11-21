@@ -72,3 +72,12 @@ jobs:
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
+
+      - name: Upload Android test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: Android-connected-test-results
+          path: app/build/reports/androidTests/connected/debug/
+          if-no-files-found: warn
+          retention-days: 14
