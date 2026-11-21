@@ -439,7 +439,7 @@ public class MissionAdapter extends Adapter<ViewHolder> implements Handler.Callb
                 if (durationText != null) {
                     duration = Long.parseLong(durationText);
                 }
-            } catch (final RuntimeException | NumberFormatException e) {
+            } catch (final RuntimeException e) {
                 Log.w(TAG, "Unable to load duration for downloaded video " + uri, e);
             } finally {
                 try {
